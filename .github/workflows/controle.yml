@@ -1,0 +1,26 @@
+# Contrôle à chaque modification : les programmes tournent et produisent des cassettes valides.
+name: controle
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  controle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Programmes
+        run: |
+          cp -r data /tmp/data
+          python3 -I tools/recalcule.py /tmp/data
+          python3 -I tools/cassettes.py /tmp/data "$(TZ=Europe/Paris date +%F)"
+          node --check /tmp/data/kg-vhs-curations.js
+          python3 -c "import json;c=json.load(open('/tmp/data/catalogue.json'));assert all(x['artist'] for x in c);assert not [x for x in c if x['fam']=='Inclassé'];print(len(c),'fiches')"

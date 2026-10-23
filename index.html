@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Curators : la musique que huit curateurs mettent en avant, classée et pressée sur cassettes VHS pour Insert Koin.">
+<title>Curators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: fiche d'archive — thèse, régimes, croisements, classements (Top 40, RYM par genre), nuages, catalogue, veille */
+:root{
+  --bg:#ECEFEC; --surface:#F7F8F6; --ink:#151A1E; --muted:#56616A; --line:#C9D0CF; --hi:#E1E6E3;
+  --pag:#1F4E8C; --nab:#9A6B12; --wya:#8E1F2A; --ida:#2F7A6E; --mau:#5B3A8C; --alp:#B4441C; --sig:#4F6B1E; --mic:#7A2E6E; --rym:#3D5566;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111518; --surface:#181E22; --ink:#E4E8E6; --muted:#9AA6AB; --line:#2C363B; --hi:#1F272C;
+  --pag:#7FA8E6; --nab:#D9AE5C; --wya:#E07A84; --ida:#6CC3B3; --mau:#B79BE6; --alp:#F0956B; --sig:#A8C76A; --mic:#D98BCB; --rym:#9FB7C7; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111518; --surface:#181E22; --ink:#E4E8E6; --muted:#9AA6AB; --line:#2C363B; --hi:#1F272C;
+  --pag:#7FA8E6; --nab:#D9AE5C; --wya:#E07A84; --ida:#6CC3B3; --mau:#B79BE6; --alp:#F0956B; --sig:#A8C76A; --mic:#D98BCB; --rym:#9FB7C7; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:20px;padding-block:28px 80px}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05}
+h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.45rem,3vw,2rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:800}
+p{margin:0}
+.eyebrow,.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lede{max-width:66ch;font-size:1.12rem}
+.note{font-size:.92rem;color:var(--muted);max-width:72ch}
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:4px 16px;flex-wrap:wrap;padding-block:10px;font-family:var(--mono);font-size:.76rem}
+nav.top a{text-decoration:none;color:var(--muted)} nav.top a:hover{color:var(--ink)}
+header{display:grid;gap:14px;padding-block:26px 30px;border-bottom:2px solid var(--ink)}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--mono);font-size:.8rem;font-variant-numeric:tabular-nums}
+.stats b{font-size:1.05rem;font-weight:600;color:var(--ink)}
+section{padding-block:44px 0;display:grid;gap:18px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.dots{display:inline-flex;gap:3px;vertical-align:1px}
+.dots .dot{width:8px;height:8px}
+/* régimes */
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:16px}
+.regime{background:var(--surface);border-top:4px solid var(--c);padding:16px 16px 18px;display:grid;gap:8px;align-content:start;min-width:0}
+.regime .who{font-family:var(--mono);font-size:.74rem;color:var(--c);letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.regime p{font-size:.95rem}
+.regime dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:.84rem}
+.regime dt{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:3px}
+.regime dd{margin:0}
+/* croisements */
+.cross{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0 28px}
+.xrow{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line);min-width:0}
+.xrow h3{font-size:1.05rem}
+.xrow .who{grid-column:1/-1;font-size:.88rem;color:var(--muted)}
+.xrow .who span{display:block}
+/* classements */
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.top40{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0 24px;counter-reset:none}
+.t40{display:grid;grid-template-columns:3.2rem 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:start;min-width:0}
+.t40 .n{font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1;color:var(--mau);font-variant-numeric:tabular-nums;text-align:right}
+.t40 .a{font-weight:600;line-height:1.25} .t40 .t{font-style:italic;line-height:1.25}
+.t40 .g{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-top:3px}
+.t40 .links{justify-content:flex-start;margin-top:6px}
+.gen{display:grid}
+.grow{display:grid;grid-template-columns:3.4rem 1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:start}
+.grow .n{font-family:var(--display);font-weight:800;font-size:1.35rem;line-height:1.1;text-align:right;font-variant-numeric:tabular-nums}
+.grow .a{font-weight:600;line-height:1.25}
+.grow .s{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:3px}
+@media (max-width:700px){.grow{grid-template-columns:2.6rem 1fr}.grow .links{grid-column:2;justify-content:flex-start}}
+.rymbox{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:24px;align-items:start}
+@media (max-width:760px){.rymbox{grid-template-columns:1fr}}
+.genres{display:grid;gap:8px;min-width:0}
+.glist{max-height:420px;overflow:auto;border:1px solid var(--line);background:var(--surface)}
+.glist button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);padding:6px 10px;cursor:pointer;font-family:var(--body);font-size:.95rem}
+.glist button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.glist button .c{font-family:var(--mono);font-size:.7rem;color:inherit;opacity:.7}
+.glist .star{color:var(--mau)}
+table.rt{width:100%;border-collapse:collapse;font-size:.93rem;font-variant-numeric:tabular-nums}
+.rtwrap{overflow-x:auto;min-width:0}
+table.rt th{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;border-bottom:1px solid var(--ink);padding:6px 8px}
+table.rt td{border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
+table.rt td.r{font-family:var(--mono);font-size:.8rem;color:var(--muted);white-space:nowrap}
+table.rt tr.sec td:nth-child(2){opacity:.9}
+.badge{font-family:var(--mono);font-size:.64rem;border:1px solid var(--line);padding:1px 5px;border-radius:3px;white-space:nowrap;color:var(--muted)}
+/* nuages */
+.clouds{display:grid;gap:22px}
+.cloud .tags{display:flex;flex-wrap:wrap;gap:3px 10px;align-items:baseline;line-height:1.3;margin-top:6px}
+.tag{background:none;border:0;padding:0 2px;cursor:pointer;color:var(--ink);font-family:var(--display);font-weight:500;border-radius:3px}
+.tag:hover{text-decoration:underline}.tag[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tag.x{font-weight:800}
+/* catalogue */
+.controls{position:sticky;top:calc(env(safe-area-inset-top,0px) + 38px);z-index:4;background:var(--bg);padding-block:10px;display:grid;gap:8px;border-bottom:1px solid var(--line)}
+.row-ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-family:var(--mono);font-size:.74rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 9px;border-radius:999px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .dot{width:8px;height:8px}
+input[type=search]{font-family:var(--mono);font-size:.85rem;padding:8px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;flex:1 1 220px;min-width:0}
+select{font-family:var(--mono);font-size:.78rem;padding:6px 8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px}
+.count{font-family:var(--mono);font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.activetag{font-family:var(--mono);font-size:.76rem;cursor:pointer;text-decoration:underline}
+.list{display:grid}
+.item{display:grid;grid-template-columns:5px 128px 1fr auto;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);align-items:start}
+.item .bar{align-self:stretch;background:var(--c);border-radius:2px}
+.item .type{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-top:4px}
+.item .t{font-weight:600;min-width:0}
+.item .m{font-size:.88rem;color:var(--muted);min-width:0}
+.item .body{min-width:0}
+.links{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.lk{font-family:var(--mono);font-size:.68rem;text-decoration:none;border:1px solid var(--line);padding:3px 7px;border-radius:4px;white-space:nowrap}
+.lk.d{border-color:var(--ink);font-weight:600}
+.lk:hover{background:var(--hi)}
+@media (max-width:700px){.item{grid-template-columns:5px 1fr}.item .type,.item .body,.item .links{grid-column:2}.links{justify-content:flex-start}}
+.legend{font-family:var(--mono);font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px}
+.legend i{font-style:normal;border:1px solid var(--line);padding:2px 6px;border-radius:3px}
+.legend i.d{border-color:var(--ink);color:var(--ink);font-weight:600}
+.more{justify-self:start}
+/* veille */
+.run{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.run b{font-family:var(--mono);font-size:.78rem}
+.tapes{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.tape{border:1px solid var(--line);background:var(--surface);padding:10px 12px;border-left:5px solid var(--c);font-family:var(--mono);font-size:.76rem;display:grid;gap:2px}
+.tape b{font-family:var(--display);font-size:1rem}
+.limits li{margin-bottom:6px}
+.new{font-family:var(--mono);font-size:.6rem;background:var(--ink);color:var(--bg);padding:1px 5px;border-radius:3px;margin-left:6px;vertical-align:2px}
+footer{margin-top:50px;font-size:.84rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<nav class="top" aria-label="Sections">
+  <a href="#croisements">Croisements</a><a href="#classements">Classements</a><a href="#nuages">Nuages</a><a href="#catalogue">Catalogue</a><a href="#veille">Cassettes</a><a href="#import">Import</a>
+</nav>
+<header>
+    <h1>Curators</h1>
+  
+  <div class="stats" id="stats"></div>
+</header>
+
+
+<section id="croisements" aria-labelledby="h-x">
+  <div class="eyebrow">I</div>
+  <h2 id="h-x">Croisements</h2>
+  
+  <div class="cross" id="cross"><p class="note">Chargement…</p></div>
+</section>
+
+<section id="classements" aria-labelledby="h-cl">
+  <div class="eyebrow">II</div>
+  <h2 id="h-cl">Classements</h2>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="gen">Classement général</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="t40">Top 40 de Mauk Tenieb</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="rym">Rate Your Music par genre</button>
+  </div>
+  <div id="pane-gen">
+    <p class="note" style="margin-bottom:10px">Tous les artistes du catalogue, classés d'abord par nombre de curateurs qui les proposent, puis par leur meilleur rang dans le top 10 000 de Rate Your Music, puis par nombre de fiches. Rangés en familles de genres.</p>
+    <div class="row-ctl" id="famchips" style="margin-bottom:8px"></div>
+    <div class="row-ctl" style="margin-bottom:6px"><input type="search" id="genq" placeholder="Chercher un artiste dans le classement" aria-label="Chercher un artiste dans le classement"><span class="count" id="gencount"></span></div>
+    <div class="gen" id="gen"></div>
+    <button class="chip more" id="genmore" hidden>Afficher la suite</button>
+  </div>
+  <div id="pane-t40" hidden>
+    
+    <div class="top40" id="top40"></div>
+  </div>
+  <div id="pane-rym" hidden>
+    <p class="note" style="margin-bottom:12px" id="rym-src">Chargement du classement…</p>
+    <div class="rymbox">
+      <div class="genres">
+        <input type="search" id="gq" placeholder="Chercher un genre (free jazz, zeuhl…)" aria-label="Chercher un genre">
+        <label class="mono"><input type="checkbox" id="gcur" checked> genres des curateurs d'abord</label>
+        <div class="glist" id="glist"></div>
+      </div>
+      <div class="rtwrap" id="rtable"></div>
+    </div>
+  </div>
+</section>
+
+<section id="nuages" aria-labelledby="h-tags">
+  <div class="eyebrow">III</div>
+  <h2 id="h-tags">Nuages de tags</h2>
+  
+  <div class="clouds">
+    <div class="cloud"><h3>Par curateur</h3><div class="tags" id="cloud-c"></div></div>
+    <div class="cloud"><h3>Par genre</h3><div class="tags" id="cloud-g"></div></div>
+    <div class="cloud"><h3>Par nom</h3><div class="tags" id="cloud-n"></div></div>
+  </div>
+</section>
+
+<section id="catalogue" aria-labelledby="h-cat">
+  <div class="eyebrow">IV</div>
+  <h2 id="h-cat">Catalogue</h2>
+  <div class="legend"><span><i class="d">▶ vidéo</i> lien publié par la source</span><span><i class="d">▶ album</i> album de l'artiste trouvé via RYM</span><span><i>⌕ YouTube</i> recherche</span><span><i class="d">Bandcamp</i> page directe</span><span><i>⌕ Bandcamp</i> recherche</span></div>
+  <div class="controls">
+    <div class="row-ctl" id="curators"></div>
+    <div class="row-ctl">
+      <select id="type" aria-label="Type de fiche"></select>
+      <select id="fam" aria-label="Famille de genres"></select>
+      <input type="search" id="q" placeholder="Chercher un nom, une œuvre, un genre…" aria-label="Rechercher dans le catalogue">
+      <button class="chip" id="crossOnly" aria-pressed="false">noms partagés</button>
+      <button class="chip" id="directOnly" aria-pressed="false">▶ écoute directe</button>
+      <span class="activetag" id="activetag"></span>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+  <div class="list" id="list"><p class="note">Chargement du catalogue…</p></div>
+  <button class="chip more" id="more" hidden>Afficher la suite</button>
+</section>
+
+<section id="veille" aria-labelledby="h-v">
+  <div class="eyebrow">V</div>
+  <h2 id="h-v">Curators · cassettes du magnétoscope</h2>
+    
+  
+  <div class="tapes" id="tapes"></div>
+</section>
+<section id="import" aria-labelledby="h-i">
+  <div class="eyebrow">VI</div>
+  <h2 id="h-i">Moisson locale</h2>
+  <div class="row-ctl"><label class="lk d" style="cursor:pointer">Charger moisson.json<input type="file" id="imp" accept=".json" hidden></label><span class="count" id="impc"></span></div>
+</section>
+
+
+
+</div>
+
+<script>
+const CUR={pag:{n:"Pagani",c:"var(--pag)"},nab:{n:"Nabe",c:"var(--nab)"},wya:{n:"Wyattxhim",c:"var(--wya)"},ida:{n:"Sly Ida",c:"var(--ida)"},mau:{n:"Mauk Tenieb",c:"var(--mau)"},alp:{n:"Alpha-27",c:"var(--alp)"},sig:{n:"Adam Sigmund",c:"var(--sig)"},mic:{n:"Microchip.ufo",c:"var(--mic)"},rym:{n:"Rate Your Music",c:"var(--rym)"}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dots=cs=>`<span class="dots">${cs.map(c=>`<i class="dot" style="background:${CUR[c].c}" title="${CUR[c].n}"></i>`).join("")}</span>`;
+const yts=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q);
+let D=[],RYM=null,shown=60;
+const state={cur:new Set(Object.keys(CUR)),type:"Tous",fam:"Toutes",q:"",direct:false,cross:false,tag:null};
+try{const s=JSON.parse(localStorage.getItem("cat9")||"null");if(s){state.direct=!!s.direct;state.cross=!!s.cross}}catch(e){}
+const save=()=>{try{localStorage.setItem("cat9",JSON.stringify({direct:state.direct,cross:state.cross}))}catch(e){}};
+const isNew=d=>d.added>"2026-10-08"&&(Date.now()-new Date(d.added).getTime())<14*864e5;
+function links(d){
+  let L="";
+  if(d.yt){const via=d.ytvia, lab=d.direct?(via?"▶ album":"▶ vidéo"):"⌕ YouTube";L+=`<a class="lk ${d.direct?"d":""}" href="${esc(d.yt)}" target="_blank" rel="noopener" title="${esc(via||"")}">${lab}</a>`}
+  if(d.bc)L+=`<a class="lk ${d.bcdirect?"d":""}" href="${esc(d.bc)}" target="_blank" rel="noopener">${d.bcdirect?"Bandcamp":"⌕ Bandcamp"}</a>`;
+  if(d.sp)L+=`<a class="lk" href="${esc(d.sp)}" target="_blank" rel="noopener" title="${esc(d.spvia||"")}">Spotify</a>`;
+  if(d.rym&&d.rym.url)L+=`<a class="lk" href="${esc(d.rym.url)}" target="_blank" rel="noopener">RYM #${d.rym.rank}</a>`;
+  if(d.src&&d.src!==d.yt)L+=`<a class="lk" href="${esc(d.src)}" target="_blank" rel="noopener">source</a>`;
+  return L;
+}
+/* ---------- stats & croisements ---------- */
+function stats(){
+  const xs=new Set(D.filter(d=>d.cross.length).map(d=>d.key));
+  const n=D.filter(d=>d.direct).length;
+  $("stats").innerHTML=`<span><b>${D.length}</b> fiches</span><span><b>${Object.keys(CUR).filter(k=>D.some(d=>d.c==k)).length}</b> curateurs</span><span><b>${xs.size}</b> noms partagés</span><span><b>${n}</b> écoutes directes</span><span><b>1 347</b> classements RYM</span>`;
+}
+function cross(){
+  const by={};
+  D.forEach(d=>{if(d.cross.length){(by[d.key]=by[d.key]||{name:d.artist,cs:d.cross,items:[]}).items.push(d)}});
+  const rows=Object.values(by).sort((a,b)=>b.cs.length-a.cs.length||a.name.localeCompare(b.name,"fr"));
+  $("cross").innerHTML=rows.map(r=>{
+    const per={};r.items.forEach(d=>{(per[d.c]=per[d.c]||[]).push(d)});
+    const lis=Object.entries(per).map(([c,ds])=>`<span><i class="dot" style="background:${CUR[c].c}"></i> ${CUR[c].n} : ${ds.slice(0,2).map(d=>esc(d.type.toLowerCase()+" — "+(d.title.includes(" · ")?d.title.split(" · ").slice(1).join(" · "):d.title))).join(" ; ")}${ds.length>2?` (+${ds.length-2})`:""}</span>`).join("");
+    const best=r.items.find(d=>d.direct)||r.items[0];
+    return `<div class="xrow"><h3>${esc(r.name)} ${dots(r.cs)}</h3><div class="links">${best.direct?`<a class="lk d" href="${esc(best.yt)}" target="_blank" rel="noopener">▶ écouter</a>`:""}<button class="lk" data-k="n" data-v="${esc(r.name)}" style="cursor:pointer;background:none;color:inherit">fiches</button></div><div class="who">${lis}</div></div>`}).join("")||'<p class="note">Aucun nom partagé.</p>';
+}
+/* ---------- Top 40 ---------- */
+function top40(){
+  const t=D.filter(d=>d.type=="Top 40").sort((a,b)=>a.rank-b.rank);
+  $("top40").innerHTML=t.map(d=>{const [a,...r]=d.title.split(" · ");const meta=d.meta.split(" · ");return `<div class="t40"><div class="n">${d.rank}</div><div style="min-width:0"><div class="a">${esc(a)} ${d.cross.length?dots(d.cross):""}</div><div class="t">${esc(r.join(" · "))}</div><div class="g">${esc(meta[1]||"")} · ${esc(meta.slice(2).join(" · "))}</div><div class="links">${links(d).replace(/<a class="lk" href="https:\/\/docs[^>]*>source<\/a>/,"")}</div></div></div>`}).join("");
+}
+/* ---------- classement général ---------- */
+let G=[],gfam="",gshown=100;
+function buildGeneral(){
+  const by={};
+  D.forEach(d=>{if(!d.key)return;const a=by[d.key]=by[d.key]||{name:d.artist,cs:new Set(),n:0,rr:null,fam:{},dir:null};
+    a.cs.add(d.c);a.n++;if(d.rr&&(a.rr==null||d.rr<a.rr))a.rr=d.rr;const f=d.fam||"Inclassé";a.fam[f]=(a.fam[f]||0)+1;if(d.direct&&!a.dir)a.dir=d;});
+  G=Object.values(by).map(a=>({...a,cs:[...a.cs].sort(),fam:Object.entries(a.fam).sort((x,y)=>y[1]-x[1])[0][0]}))
+    .sort((x,y)=>y.cs.length-x.cs.length||(x.rr??1e9)-(y.rr??1e9)||y.n-x.n||x.name.localeCompare(y.name,"fr"));
+  G.forEach((a,i)=>a.pos=i+1);
+  const fc={};G.forEach(a=>fc[a.fam]=(fc[a.fam]||0)+1);
+  $("famchips").innerHTML=[["",G.length,"Toutes les familles"],...Object.entries(fc).sort((a,b)=>b[1]-a[1]).map(([f,n])=>[f,n,f])].map(([f,n,l])=>`<button class="chip" data-gf="${esc(f)}" aria-pressed="${f==gfam}">${esc(l)} <span class="count">${n}</span></button>`).join("");
+}
+function general(){
+  document.querySelectorAll("#famchips .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.gf==gfam));
+  const q=$("genq").value.toLowerCase();
+  const R=G.filter(a=>(!gfam||a.fam==gfam)&&(!q||a.name.toLowerCase().includes(q)));
+  $("gencount").textContent=R.length+" artistes";
+  $("gen").innerHTML=R.slice(0,gshown).map((a,i)=>{const lk=a.dir?`<a class="lk d" href="${esc(a.dir.yt)}" target="_blank" rel="noopener">▶ écouter</a>`:`<a class="lk" href="${esc(yts(a.name))}" target="_blank" rel="noopener">⌕ YouTube</a>`;
+    return `<div class="grow"><div class="n" style="color:${CUR[a.cs[0]].c}">${gfam||q?i+1:a.pos}</div><div style="min-width:0"><div class="a">${esc(a.name)} ${dots(a.cs)}</div><div class="s">${esc(a.fam)} · ${a.cs.length} curateur${a.cs.length>1?"s":""} · ${a.n} fiche${a.n>1?"s":""}${a.rr?" · RYM #"+a.rr:""}${(gfam||q)?" · n° "+a.pos+" au général":""}</div></div><div class="links">${lk}<button class="lk" data-k="n" data-v="${esc(a.name)}" style="cursor:pointer;background:none;color:inherit">fiches</button></div></div>`}).join("")||'<p class="note">Aucun artiste.</p>';
+  $("genmore").hidden=R.length<=gshown;$("genmore").textContent="Afficher la suite ("+(R.length-gshown)+")";
+}
+$("genq").addEventListener("input",()=>{gshown=100;general()});
+/* ---------- RYM ---------- */
+let gsel=null;
+function loadRym(){
+  if(RYM)return Promise.resolve(RYM);
+  return fetch("data/rym.json").then(r=>r.json()).then(j=>{RYM=j;$("rym-src").textContent=j.source;gsel=j.curated.includes("Free Jazz")?"Free Jazz":j.curated[0];glist();rtable();return j}).catch(()=>{$("rym-src").textContent="Le classement n'a pas pu être chargé. Rechargez la page."});
+}
+function glist(){
+  const q=$("gq").value.toLowerCase(),cur=$("gcur").checked,cs=new Set(RYM.curated);
+  let gs=Object.entries(RYM.genres).filter(([g])=>!q||g.toLowerCase().includes(q));
+  gs.sort((a,b)=>(cur?(cs.has(b[0])-cs.has(a[0])):0)||b[1].n-a[1].n);
+  $("glist").innerHTML=gs.slice(0,400).map(([g,v])=>`<button data-g="${esc(g)}" aria-pressed="${g==gsel}"><span>${cs.has(g)?'<span class="star" title="genre présent chez les curateurs">◆</span> ':""}${esc(g)}</span><span class="c">${v.n}</span></button>`).join("")||'<p class="note" style="padding:8px">Aucun genre.</p>';
+}
+function rtable(){
+  if(!gsel||!RYM.genres[gsel]){$("rtable").innerHTML="";return}
+  const g=RYM.genres[gsel];
+  const keys=new Set(D.map(d=>d.key));
+  const norm=s=>s.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/&/g," and ").replace(/^the\s+/,"").replace(/[^a-z0-9]+/g," ").trim();
+  $("rtable").innerHTML=`<h3 style="margin-bottom:8px">${esc(gsel)} <span class="count">· ${g.n} albums dans le top 10 000</span></h3><table class="rt"><thead><tr><th>#</th><th>Album</th><th>Année</th><th>Note</th><th>Écoute</th></tr></thead><tbody>`+g.top.map(([rk,p],i)=>{const a=RYM.albums[rk];if(!a)return"";const inCat=keys.has(norm(a[0]));
+    const L=(a[5]?`<a class="lk d" href="https://www.youtube.com/watch?v=${esc(a[5])}" target="_blank" rel="noopener">▶ YouTube</a>`:`<a class="lk" href="${esc(yts(a[0]+" "+a[1]))}" target="_blank" rel="noopener">⌕ YouTube</a>`)+(a[6]?` <a class="lk d" href="${esc(a[6])}" target="_blank" rel="noopener">Bandcamp</a>`:"")+(a[7]?` <a class="lk" href="${esc(a[7])}" target="_blank" rel="noopener">Spotify</a>`:"")+(a[8]?` <a class="lk" href="${esc(a[8])}" target="_blank" rel="noopener">RYM</a>`:"");
+    return `<tr class="${p?"":"sec"}"><td class="r">${i+1}<br><span class="badge">#${rk}</span></td><td><b>${esc(a[0])}</b>${inCat?' <span class="badge" title="artiste présent dans le catalogue">curateurs</span>':""}<br><i>${esc(a[1])}</i>${p?"":' <span class="badge">secondaire</span>'}<br><span class="count">${esc(a[4])}</span></td><td class="r">${esc(a[2])}</td><td class="r">${esc(a[3])}</td><td><div class="links" style="justify-content:flex-start">${L}</div></td></tr>`}).join("")+`</tbody></table>`;
+}
+/* ---------- nuages ---------- */
+function sizeOf(n,max){return (0.8+1.5*Math.sqrt(n/max)).toFixed(2)+"rem"}
+function cloud(id,entries,kind){
+  const max=Math.max(1,...entries.map(e=>e[1]));
+  $(id).innerHTML=entries.map(([v,n,x])=>`<button class="tag ${x?"x":""}" data-k="${kind}" data-v="${esc(v)}" aria-pressed="${!!(state.tag&&state.tag.k==kind&&state.tag.v==v)}" style="font-size:${sizeOf(n,max)}${kind=="c"?";color:"+CUR[v].c:""}" title="${n} fiches">${esc(kind=="c"?CUR[v].n:v)}</button>`).join(" ");
+}
+function clouds(){
+  const cc={},gc={},nc={},nx={};
+  D.forEach(d=>{cc[d.c]=(cc[d.c]||0)+1;(d.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1);if(d.artist){nc[d.artist]=(nc[d.artist]||0)+1;if(d.cross.length)nx[d.artist]=1}});
+  cloud("cloud-c",Object.keys(CUR).filter(k=>cc[k]).map(k=>[k,cc[k]]),"c");
+  cloud("cloud-g",Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,100).sort((a,b)=>a[0].localeCompare(b[0],"fr")),"g");
+  cloud("cloud-n",Object.entries(nc).sort((a,b)=>(!!nx[b[0]]-!!nx[a[0]])||(b[1]-a[1])).slice(0,160).sort((a,b)=>a[0].localeCompare(b[0],"fr")).map(([v,n])=>[v,n+(nx[v]?2:0),nx[v]]),"n");
+  $("activetag").textContent=state.tag?("filtre : "+(state.tag.k=="g"?"#":"")+state.tag.v+" ✕"):"";
+}
+/* ---------- catalogue ---------- */
+function controls(){
+  $("curators").innerHTML=Object.entries(CUR).filter(([k])=>D.some(d=>d.c==k)).map(([k,v])=>`<button class="chip" data-c="${k}" aria-pressed="${state.cur.has(k)}"><i class="dot" style="background:${v.c}"></i>${v.n} <span class="count">${D.filter(d=>d.c==k).length}</span></button>`).join("");
+  const types=["Tous",...[...new Set(D.map(d=>d.type))].sort((a,b)=>a.localeCompare(b,"fr"))];
+  const fams=["Toutes",...[...new Set(D.map(d=>d.fam||"Inclassé"))].sort((a,b)=>a.localeCompare(b,"fr"))];
+  $("fam").innerHTML=fams.map(t=>`<option ${t==state.fam?"selected":""}>${esc(t)}</option>`).join("");
+  $("type").innerHTML=types.map(t=>`<option ${t==state.type?"selected":""}>${esc(t)}</option>`).join("");
+  $("directOnly").setAttribute("aria-pressed",state.direct);$("crossOnly").setAttribute("aria-pressed",state.cross);
+}
+function rows(){
+  const q=state.q.toLowerCase();
+  return D.filter(d=>state.cur.has(d.c)&&(state.type=="Tous"||d.type==state.type)&&(state.fam=="Toutes"||d.fam==state.fam)&&(!state.direct||d.direct)&&(!state.cross||d.cross.length)
+    &&(!state.tag||(state.tag.k=="g"?(d.genres||[]).includes(state.tag.v):d.artist===state.tag.v))
+    &&(!q||(d.title+" "+d.meta+" "+d.type+" "+(d.genres||[]).join(" ")).toLowerCase().includes(q)));
+}
+function render(){
+  const R=rows();
+  $("count").textContent=R.length+" / "+D.length+" fiches";
+  $("list").innerHTML=R.slice(0,shown).map(d=>`<div class="item" style="--c:${CUR[d.c].c}"><span class="bar"></span><span class="type">${esc(d.type)}${d.rank?" · n° "+d.rank:""}</span><div class="body"><div class="t">${esc(d.title)}${d.cross.length?" "+dots(d.cross):""}${isNew(d)?'<span class="new">nouveau</span>':""}</div>${d.meta?`<div class="m">${esc(d.meta)}</div>`:""}${(d.genres&&d.genres.length)?`<div class="m">${d.genres.map(g=>"#"+esc(g)).join(" ")}</div>`:""}</div><div class="links">${links(d)}</div></div>`).join("")||'<p class="note">Aucune fiche pour ces filtres.</p>';
+  $("more").hidden=R.length<=shown;$("more").textContent="Afficher la suite ("+(R.length-shown)+")";
+}
+function goCat(){document.getElementById("catalogue").scrollIntoView({block:"start"})}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.gf!==undefined){gfam=b.dataset.gf;gshown=100;general();return}
+  if(b.id=="genmore"){gshown+=200;general();return}
+  if(b.dataset.tab){document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t==b));["gen","t40","rym"].forEach(p=>$("pane-"+p).hidden=b.dataset.tab!=p);if(b.dataset.tab=="rym")loadRym();return}
+  if(b.dataset.g){gsel=b.dataset.g;glist();rtable();return}
+  if(b.dataset.c){const k=b.dataset.c;state.cur.has(k)&&state.cur.size>1?state.cur.delete(k):state.cur.add(k)}
+  else if(b.dataset.k){const k=b.dataset.k,v=b.dataset.v;if(k=="c"){state.cur=new Set([v]);state.tag=null}else{state.tag=(state.tag&&state.tag.k==k&&state.tag.v==v)?null:{k,v}}shown=60;goCat()}
+  else if(b.id=="directOnly"){state.direct=!state.direct}
+  else if(b.id=="crossOnly"){state.cross=!state.cross}
+  else if(b.id=="more"){shown+=120;render();return}
+  else return;
+  shown=Math.max(60,shown);save();controls();clouds();render();
+});
+$("activetag").addEventListener("click",()=>{state.tag=null;clouds();render()});
+$("type").addEventListener("change",e=>{state.type=e.target.value;shown=60;render()});
+$("fam").addEventListener("change",e=>{state.fam=e.target.value;shown=60;render()});
+$("q").addEventListener("input",e=>{state.q=e.target.value;shown=60;render()});
+$("gq").addEventListener("input",()=>RYM&&glist());
+$("gcur").addEventListener("change",()=>RYM&&glist());
+fetch("data/catalogue.json").then(r=>r.json()).then(j=>{D=j;D.forEach(d=>{d.cross=d.cross||[];d.genres=d.genres||[]});stats();cross();buildGeneral();general();top40();controls();clouds();render();if(window.__moisson){$("impc").textContent="+"+merge(window.__moisson)}}).catch(()=>{$("list").innerHTML='<p class="note">Le catalogue n\'a pas pu être chargé. Rechargez la page.</p>'});
+function merge(arr){const seen=new Set(D.map(d=>d.c+"|"+d.title.toLowerCase()));const nk=s=>s.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/&/g," and ").replace(/^the\s+/,"").replace(/[^a-z0-9]+/g," ").trim();let n=0;arr.forEach(d=>{if(!d||!d.c||!CUR[d.c]||!d.title)return;const k=d.c+"|"+d.title.toLowerCase();if(seen.has(k))return;seen.add(k);d.artist=d.artist||"";d.key=nk(d.artist);d.genres=d.genres||[];d.type=d.type||"Moisson";d.meta=d.meta||"";if(!d.yt)d.yt=yts(d.title.replace(" · "," "));D.push(d);n++});const by={};D.forEach(d=>{if(d.key)(by[d.key]=by[d.key]||new Set).add(d.c)});D.forEach(d=>{d.cross=d.key&&by[d.key].size>1?[...by[d.key]].sort():[]});stats();cross();controls();clouds();render();return n}
+try{const m=JSON.parse(localStorage.getItem("moisson")||"null");if(m)window.__moisson=m}catch(e){}
+$("imp").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const a=JSON.parse(t);const n=merge(a);$("impc").textContent="+"+n;try{localStorage.setItem("moisson",t)}catch(e){}}).catch(()=>{$("impc").textContent="fichier illisible"})});
+fetch("data/vhs-cassettes.json").then(r=>r.json()).then(v=>{const map={};Object.entries(CUR).forEach(([k,c])=>map[c.n]=c.c);$("tapes").innerHTML=v.tapes.map(t=>{const n=t.label||t.channel.replace("Curations croisées · ","");return `<div class="tape" style="--c:${map[n]||"var(--ink)"}"><b>${esc(n)}</b><span>${t.count} pistes</span></div>`}).join("")}).catch(()=>{});
+</script>
+
+</body></html>
+</body>
+</html>
