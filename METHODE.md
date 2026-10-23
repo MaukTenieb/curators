@@ -36,7 +36,7 @@ La musique d'un curateur choisie par un autre curateur reste au catalogue.
 | Champ | Contenu |
 |---|---|
 | `c` | code du curateur |
-| `type` | nature de la mention (« Diffusé dans The Lowdown », « Iceberg », « Top 40 », « Commenté »…) |
+| `type` | nature de la mention, en anglais (« Played on The Lowdown », « Iceberg », « Top 40 », « Commented on »…) |
 | `title` | « Artiste · Titre » |
 | `artist` | artiste, obligatoire |
 | `meta` | contexte : émission, rang, date, vidéo où l'artiste est commenté |
@@ -53,17 +53,14 @@ La musique d'un curateur choisie par un autre curateur reste au catalogue.
 
 ## La veille du lundi
 
-Le flux GitHub Actions `.github/workflows/veille.yml` lance Claude Code chaque lundi à 6 h 49 UTC. `veille/PROMPT.md` contient ses consignes exactes. Chaque lundi, la veille :
+Le flux `.github/workflows/veille.yml` part chaque lundi à 6 h 49 UTC.
 
-1. relit les sources de chaque curateur depuis la veille précédente ;
-2. crée une fiche par nouvelle mention ;
-3. cherche la vidéo YouTube de chaque nouveauté : identifiant donné par la source, sinon vidéo de l'album dans le classement RYM, sinon recherche web vérifiée par l'oEmbed de YouTube (titre de la vidéo conforme à l'artiste ou au titre, auteur extérieur aux curateurs) ;
-4. lance `tools/recalcule.py`, puis `tools/cassettes.py` ;
-5. commite « Veille du … » et publie une note de veille (release GitHub) qui liste les nouvelles vidéos et leurs listes de lecture YouTube, sans nommer de source.
+1. `tools/veille.py` lit, sans aucun secret : les nouveaux épisodes de The Lowdown sur archive.org, les nouvelles émissions KALX d'Ida B. sur Spinitron, sa playlist Spotify, l'Openwhyd de Mauk Tenieb. Il ajoute une fiche par nouvelle mention et prend l'identifiant YouTube donné par la source, sinon la vidéo de l'album de l'artiste le mieux classé dans `rym.json`, sinon un lien de recherche YouTube.
+2. Quand le dépôt a le secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code suit `veille/PROMPT.md` pour les autres curateurs (Dominique Pagani, Marc-Édouard Nabe, Wyattxhim, Alpha-27, Microchip.ufo).
+3. `tools/recalcule.py`, puis `tools/cassettes.py`.
+4. Le flux commite « Watch of … » et publie une note de veille (release) avec les nouvelles vidéos et leurs listes de lecture YouTube.
 
-Deux heures plus tard, le flux `curators` d'Insert Koin copie `data/kg-vhs-curations.js` dans le magnétoscope et renouvelle le cache du site. Le flux `controle` vérifie les programmes à chaque modification du dépôt. La page https://mauktenieb.github.io/curators/ affiche le catalogue, le classement général et les cassettes.
-
-Un site qui refuse la lecture automatique sort de la veille de la semaine. TikTok refuse les robots : la veille lit Nabe et Microchip.ufo par ce que les moteurs de recherche en indexent.
+À 9 h 19 UTC, le flux `curators` d'Insert Koin copie `data/kg-vhs-curations.js` dans le magnétoscope. Le flux `controle` vérifie les programmes à chaque modification. La page https://mauktenieb.github.io/curators/ affiche le catalogue, les classements et les cassettes. Version anglaise : [METHOD.md](METHOD.md).
 
 ## Le classement général
 

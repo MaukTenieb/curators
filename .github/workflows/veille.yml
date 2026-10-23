@@ -1,11 +1,13 @@
-# Veille du lundi : Claude Code relit les sources des curateurs, ajoute les nouveautés,
-# puis les programmes du dépôt recalculent le classement et pressent les cassettes.
-# Chaque veille produit un commit « Veille du … » et une note de veille (release) qui liste les nouvelles vidéos.
+# Monday watch. A program (tools/veille.py) reads the curators' sources a program can read, with zero secret:
+# The Lowdown on archive.org, KALX on Spinitron, the Spotify playlist of Ida B., Openwhyd.
+# When the repo has the secret CLAUDE_CODE_OAUTH_TOKEN, Claude Code also reads the other sources (veille/PROMPT.md).
+# Then the programs recompute the ranking and press the cassettes; each watch commits « Watch of … »
+# and publishes a release with the new videos.
 name: veille
 
 on:
   schedule:
-    - cron: "49 6 * * 1"   # lundi, 6 h 49 UTC (8 h 49 à Paris l'été, 7 h 49 l'hiver)
+    - cron: "49 6 * * 1"   # Monday, 6:49 UTC
   workflow_dispatch:
 
 permissions:
@@ -20,6 +22,8 @@ jobs:
   veille:
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    env:
+      HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,24 +31,29 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Date du jour
+      - name: Date
         id: date
-        run: echo "jour=$(TZ=Europe/Paris date +%F)" >> "$GITHUB_OUTPUT"
+        run: echo "day=$(TZ=Europe/Paris date +%F)" >> "$GITHUB_OUTPUT"
 
-      - name: Moisson (Claude Code)
+      - name: Harvest (program)
+        run: python3 -I tools/veille.py data "${{ steps.date.outputs.day }}"
+
+      - name: Harvest of the other sources (Claude Code, with the secret only)
+        if: env.HAS_CLAUDE == 'true'
+        continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            Nous sommes le ${{ steps.date.outputs.jour }}. Lis veille/PROMPT.md à la racine du dépôt et exécute-le en entier, seul, sans poser de question.
+            Today is ${{ steps.date.outputs.day }}. Read veille/PROMPT.md at the root of the repo and follow it, alone, without asking questions. tools/veille.py already read Adam Sigmund, Ida B. and Openwhyd today: read the other curators.
           claude_args: |
             --max-turns 300
             --allowedTools "Read,Write,Edit,Glob,Grep,WebFetch,WebSearch,Bash(python3:*),Bash(node:*),Bash(ls:*),Bash(cat:*)"
 
-      - name: Recalcul et cassettes
+      - name: Ranking and cassettes
         run: |
           python3 -I tools/recalcule.py data
-          python3 -I tools/cassettes.py data "${{ steps.date.outputs.jour }}"
+          python3 -I tools/cassettes.py data "${{ steps.date.outputs.day }}"
           node --check data/kg-vhs-curations.js
 
       - name: Commit
@@ -54,15 +63,15 @@ jobs:
           git config user.email "mauktenieb@gmail.com"
           git add -A data tools
           if git diff --cached --quiet; then echo "change=0" >> "$GITHUB_OUTPUT"; exit 0; fi
-          git commit -m "Veille du ${{ steps.date.outputs.jour }}"
+          git commit -m "Watch of ${{ steps.date.outputs.day }}"
           git push
           echo "change=1" >> "$GITHUB_OUTPUT"
 
-      - name: Note de veille
+      - name: Release note
         if: steps.commit.outputs.change == '1' && hashFiles('data/derniere-veille.md') != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "veille-${{ steps.date.outputs.jour }}" \
+          gh release create "watch-${{ steps.date.outputs.day }}" \
             --title "$(head -n1 data/derniere-veille.md | sed 's/^# //')" \
             --notes-file data/derniere-veille.md

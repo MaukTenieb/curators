@@ -1,6 +1,6 @@
-"""Recalcule le catalogue Curators : retire l'autopromotion des curateurs, remplace les liens d'écoute qui mènent à une vidéo de curateur,
-normalise les clés d'artistes, calcule le meilleur rang RYM (rr), la famille de genres (fam) et les noms partagés (cross).
-Idempotent. usage : python3 -I tools/recalcule.py data
+"""Recomputes the Curators catalogue: takes out the curators' self-promotion, replaces listening links that lead to a curator's
+own video, normalises the artist keys, computes the best RYM rank (rr), the genre family (fam) and the shared names (cross).
+Idempotent. usage: python3 -I tools/recalcule.py data
 """
 import json,unicodedata,re,collections,sys
 from urllib.parse import quote
@@ -24,7 +24,7 @@ def relink(x):
   x.pop('ytvia',None)
   if hit:
     rk,a=hit; x['yt']='https://www.youtube.com/watch?v='+a[5]; x['direct']=True
-    x['ytvia']=f"{a[1]} ({a[2]}), album de l'artiste le mieux classé sur RYM disposant d'un lien YouTube"
+    x['ytvia']=f"{a[1]} ({a[2]}), the artist's best-ranked album on RYM with a YouTube link"
   else:
     q=x['artist']+(' '+x['title'].split(' · ',1)[1] if ' · ' in x['title'] else '')
     x['yt']='https://www.youtube.com/results?search_query='+quote(q); x['direct']=False
@@ -34,9 +34,9 @@ for x in c:
   t=x['type']
   if x['c']=='pag' and t=='Playlist' and 'Furtw' in x['meta']: x['artist']='Wilhelm Furtwängler'
   if (x['c']=='nab' and t in('Livre','Texte')) or (x['c']=='pag' and t=='Playlist' and x['artist'].strip()):
-    work=x['title']; kind={'Livre':'livre','Texte':'texte','Playlist':'playlist'}[t]
-    x['meta']=(f"sujet du {kind} de Nabe « {work} »" if x['c']=='nab' else f"retenu dans la playlist de Pagani « {work} » ({x['meta']})")
-    x['type']='Sujet d\'un livre ou texte' if x['c']=='nab' else 'Mis en playlist'
+    work=x['title']; kind={'Livre':'book','Texte':'text','Playlist':'playlist'}[t]
+    x['meta']=(f"subject of Marc-Édouard Nabe's {kind} « {work} »" if x['c']=='nab' else f"kept in Dominique Pagani's playlist « {work} » ({x['meta']})")
+    x['type']='Subject of a book or text' if x['c']=='nab' else 'In a playlist'
     x['title']=x['artist']; x['_conv']=1
     dup=next((y for y in out if y['c']==x['c'] and y['title']==x['title']),None)
     if dup: dup['meta']=(dup['meta']+' ; ' if dup['meta'] else '')+x['meta']; log['fusionnées '+x['c']]+=1; continue
@@ -54,14 +54,14 @@ for x in c:
     serie=x['type'][len('Commenté ('):-1]
     old=x['title']; 
     if 'youtube.com/watch' in x['yt']: x['src']=x['yt']
-    x['meta']=f"commenté par Pagani dans « {old} » ({serie})"
-    x['title']=x['artist']; x['type']='Commenté'
+    x['meta']=f"commented on by Dominique Pagani in « {old} » ({serie})"
+    x['title']=x['artist']; x['type']='Commented on'
     if (x['c'],x['title']) in seen:
       ex=next(y for y in c if y['c']=='pag' and y['title']==x['title'] and y is not x)
       ex['meta']=(ex['meta']+' ; ' if ex['meta'] else '')+x['meta']; log['fusionnées pag']+=1; continue
     seen.add((x['c'],x['title'])); relink(x); log['converties pag']+=1
   elif x['c']=='alp' and x['type']=='Essentials' and 'Alpha-27 Essentials' not in x['meta']:
-    x['src']=x['yt']; x['meta']=(x['meta']+' · ' if x['meta'] else '')+'présenté dans un épisode « Alpha-27 Essentials »'
+    x['src']=x['yt']; x['meta']=(x['meta']+' · ' if x['meta'] else '')+'shown in an « Alpha-27 Essentials » episode'
     relink(x); log['reliées alp']+=1
   out.append(x)
 c=out

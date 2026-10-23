@@ -1,4 +1,4 @@
-# Contrôle à chaque modification : les programmes tournent et produisent des cassettes valides.
+# Check on every change: the programs run and press valid cassettes.
 name: controle
 
 on:
@@ -17,10 +17,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Programmes
+      - name: Programs
         run: |
           cp -r data /tmp/data
           python3 -I tools/recalcule.py /tmp/data
           python3 -I tools/cassettes.py /tmp/data "$(TZ=Europe/Paris date +%F)"
           node --check /tmp/data/kg-vhs-curations.js
-          python3 -c "import json;c=json.load(open('/tmp/data/catalogue.json'));assert all(x['artist'] for x in c);assert not [x for x in c if x['fam']=='Inclassé'];print(len(c),'fiches')"
+          python3 -c "import json;c=json.load(open('/tmp/data/catalogue.json'));assert all(x['artist'] for x in c);print(len(c),'entries,',sum(x['fam']=='Inclassé' for x in c),'with zero genre (Pot-pourri)')"

@@ -105,6 +105,7 @@ for d in reversed(dates):
   g=collections.defaultdict(list)
   for x in week: g[comp_of(x)].append(x)
   for genre,fs in sorted(g.items(),key=lambda t:-len(t[1])):
+    if genre=='Inclassé': continue   # entries with zero genre go to the Pot-pourri
     rfr,_=rep(d)
     t=tape('Veille '+d+' · '+genre,genre,sorted(fs,key=byrank),'veille',
       f"Veille du {rfr} ({d}) : vidéos trouvées depuis la veille précédente, genre « {genre} » ; "+ORDER_FR,
@@ -122,7 +123,7 @@ for genre,fs in sorted(groups.items(),key=lambda t:-len(t[1])):
   fs.sort(key=byrank)
   t=tape(genre,genre,fs,'genre',f"Compilation « {genre} » : toutes les vidéos de ce genre au catalogue, 99 au plus ; "+ORDER_FR,
          f"“{EN.get(genre,genre)}” compilation: every video of this genre in the catalogue, 99 at most; "+ORDER_EN,99)
-  if t and t['count']>=4: tapes.append(t)
+  if t and t['count']>=4 and genre!='Inclassé': tapes.append(t)
   elif t: rest+=fs
 t=tape('Pot-pourri','Pot-pourri',sorted(rest,key=byrank),'genre',"Pot-pourri : les genres qui comptent moins de 4 vidéos ; "+ORDER_FR,
        "Mixed bag: genres with fewer than 4 videos; "+ORDER_EN,99)

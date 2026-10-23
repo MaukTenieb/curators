@@ -2,7 +2,7 @@
 
 Curators lists the music that eight curators put forward by other artists, ranks those artists and presses VHS cassettes for the deck of [Insert Koin](https://mauktenieb.github.io/insertkoin/), row CURATORS.
 
-By Mauk Tenieb & Korhogo. Page: https://mauktenieb.github.io/curators/ · method, in French: [METHODE.md](METHODE.md)
+By Mauk Tenieb & Korhogo. Page: https://mauktenieb.github.io/curators/ · method: [METHOD.md](METHOD.md), in French: [METHODE.md](METHODE.md)
 
 ## Curators and sources
 
@@ -27,9 +27,9 @@ Ranks and genres come from Rate Your Music's top 10,000 albums ([sameraslan/recm
 
 ## Monday watch
 
-1. The workflow `veille` starts on Monday at 6:49 UTC. Claude Code follows [veille/PROMPT.md](veille/PROMPT.md): it reads each source since the last watch, adds one entry per new mention and finds a YouTube video for each.
+1. The workflow `veille` starts on Monday at 6:49 UTC. `tools/veille.py` reads, with zero secret, Adam Sigmund's The Lowdown, Ida B.'s KALX shows and Spotify playlist, and Mauk Tenieb's Openwhyd; it adds one entry per new mention and finds a YouTube video for each. With the secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code also reads the other curators, following [veille/PROMPT.md](veille/PROMPT.md).
 2. `tools/recalcule.py` recomputes the catalogue; `tools/cassettes.py` presses the cassettes.
-3. The workflow commits « Veille du … » and publishes a release with the new videos and links that play them as YouTube playlists.
+3. The workflow commits « Watch of … » and publishes a release with the new videos and links that play them as YouTube playlists.
 4. At 9:19 UTC, the workflow `curators` of Insert Koin copies `data/kg-vhs-curations.js` into its VHS deck.
 
 The workflow `controle` runs both programs on every change.
@@ -51,21 +51,23 @@ Each label names a genre and a date of the French Republican calendar, in an ink
 | `data/vhs-cassettes.json`, `data/kg-vhs-curations.js` | the cassettes for Insert Koin's deck |
 | `data/rym.json` | Rate Your Music's top 10,000 albums, with YouTube, Bandcamp and Spotify links |
 | `index.html` | the page: general ranking, Top 40, Rate Your Music by genre, tag clouds, catalogue, cassettes |
+| `tools/veille.py` | the Monday harvest, with zero secret |
 | `tools/recalcule.py` | cleans and recomputes the catalogue |
 | `tools/cassettes.py` | presses the cassettes |
 | `tools/self_ids.json` | the curators' own videos, kept out of the listening links |
-| `veille/PROMPT.md` | instructions of the Monday watch |
+| `veille/PROMPT.md` | instructions of the optional Claude Code step |
 
 ## Run by hand
 
 ```
+python3 -I tools/veille.py data YYYY-MM-DD
 python3 -I tools/recalcule.py data
 python3 -I tools/cassettes.py data YYYY-MM-DD
 ```
 
 ## Setup
 
-The workflow `veille` reads one repository secret, `CLAUDE_CODE_OAUTH_TOKEN`, made with `claude setup-token`. GitHub Pages serves `index.html` from the branch `main`.
+GitHub Pages serves `index.html` from the branch `main`. The program watch runs with zero secret. The optional secret `CLAUDE_CODE_OAUTH_TOKEN` adds the curators that only a reader of web pages can follow.
 
 ## Rights
 

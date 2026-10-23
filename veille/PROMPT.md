@@ -1,48 +1,42 @@
-# Consignes de la veille du lundi
+# Instructions of the Monday watch (optional Claude Code step)
 
-Claude Code suit ce texte chaque lundi, dans le flux GitHub Actions `.github/workflows/veille.yml`. Le flux recalcule ensuite le classement, presse les cassettes, commite et publie la note de veille ; Claude Code modifie seulement les fichiers de `data/` et `tools/self_ids.json`, sans commit.
+The workflow `.github/workflows/veille.yml` runs `tools/veille.py` every Monday: it reads Adam Sigmund, Ida B. and Mauk Tenieb's Openwhyd with zero secret. When the repo has the secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code then follows this text for the other curators. The workflow recomputes the ranking, presses the cassettes, commits and publishes the release note; Claude Code edits `data/` and `tools/self_ids.json` only, and leaves the commit to the workflow.
 
 ---
 
-Tu tiens la veille de Curators : le catalogue de la musique que huit curateurs mettent en avant chez d'autres artistes. Avance seul, sans question, en français. Lis d'abord METHODE.md.
+You run the Curators watch: the catalogue of the music that eight curators put forward by other artists. Work alone, in English. Read METHOD.md first.
 
-## Règles
+## Rules
 
-- Une fiche = la musique D'UN AUTRE ARTISTE proposée par un curateur (morceau diffusé, album classé, critiqué, cité, case d'iceberg, sortie choisie pour un label). Champ `artist` obligatoire. Jamais de fiche « conteneur » (profil, entretien, émission, chaîne, compte, playlist sans artiste).
-- Pas d'autopromotion : rien de ce qu'un curateur publie sur son propre travail (livres, textes, lectures de Nabe ; playlists de Pagani — une playlist consacrée à un artiste devient une fiche « Mis en playlist » au nom de cet artiste ; vidéos du curateur lui-même : Pagani Parle Musique, Musicosophie, Alpha-27 Essentials/Review, vidéos Wyattxhim). Ces vidéos servent de `src`, jamais de `yt`. Ajoute tout nouvel identifiant de vidéo de curateur à `tools/self_ids.json`.
-- La musique d'un curateur choisie par un AUTRE curateur reste admise.
-- Pas de doublon : même `c` et même `title` → fusionne la `meta`.
-- Un site qui refuse la lecture automatique : passe au suivant, sans le relancer ni le contourner.
+- One entry = the music of ANOTHER artist put forward by a curator (a track played, an album ranked, reviewed or cited, an iceberg tier, a release picked for a label). Every entry names its artist (`artist`). Zero « container » entry (profile, interview, show, channel, account, playlist with zero artist named).
+- Zero self-promotion: what a curator publishes about their own work (Marc-Édouard Nabe's books, texts and readings; Dominique Pagani's playlists, where a playlist given to one artist becomes an « In a playlist » entry under that artist; the curators' own videos: Pagani Parle Musique, Musicosophie, Alpha-27 Essentials and Review, Wyattxhim's videos). Those videos go in `src`; `yt` leads to the other artist's music. Add every new curator video id to `tools/self_ids.json`.
+- A curator's music picked by ANOTHER curator stays in.
+- One entry per curator and title: same `c` and same `title` → merge the `meta`.
+- A site that refuses programs: move to the next one; one try per site.
+- Types and comments in English; curators under their full names (Dominique Pagani, Marc-Édouard Nabe); titles of works as their authors wrote them.
 
-## 1. Lire
+## 1. Read
 
-`data/catalogue.json` (fiches), `data/veille.json` (journal), `data/rym.json` (top 10 000 de Rate Your Music : `albums` = {rang: [artiste, titre, année, note, genres, id YouTube, Bandcamp, Spotify, URL RYM]}). Fiche : {c,type,title,meta,src,yt,direct,ytvia?,bc,bcdirect?,sp?,rym?,rymArtist?,rank?,artist,key,genres,fam,rr,cross,added,ep?}. Codes : pag Pagani, nab Nabe, wya Wyattxhim, ida Sly Ida, mau Mauk Tenieb, alp Alpha-27, sig Adam Sigmund, mic Microchip.ufo.
+`data/catalogue.json` (entries), `data/veille.json` (log), `data/rym.json` (Rate Your Music top 10,000: `albums` = {rank: [artist, title, year, rating, genres, YouTube id, Bandcamp, Spotify, RYM URL]}). Entry: {c,type,title,meta,src,yt,direct,ytvia?,bc,bcdirect?,sp?,rym?,rymArtist?,rank?,artist,key,genres,fam,rr,cross,added,ep?}. Codes: pag Dominique Pagani, nab Marc-Édouard Nabe, wya Wyattxhim, ida Ida B. (Sly Ida), mau Mauk Tenieb, alp Alpha-27, sig Adam Sigmund, mic Microchip.ufo.
 
-## 2. Moissonner depuis la dernière date de `data/veille.json`
+## 2. Harvest since the last date of `data/veille.json` (tools/veille.py already read sig, ida and Openwhyd)
 
-- sig : https://archive.org/advancedsearch.php?q=title%3A%28%22the+lowdown+on+mad+wasp+radio%22%29&fl%5B%5D=identifier&rows=400&output=json&sort%5B%5D=identifier+asc ; pour chaque identifiant dont aucune fiche n'a src=https://archive.org/details/<id>, lis https://archive.org/metadata/<id>/metadata (repli : /details/<id>) et extrais chaque titre : type « Diffusé dans The Lowdown », title « Artiste · Titre », meta « The Lowdown n° NNN », ep. Sorties d'autres artistes sur https://bbis.us/~newform/sub65/ (identifiant sNNNNN vérifié par https://archive.org/metadata/sNNNNN/metadata) : type « Sortie sub65 ».
-- ida : https://spinitron.com/KALX/dj/169739/Sly-Ida (chaque titre des nouvelles émissions : type « Morceau ») ; https://open.spotify.com/embed/playlist/3WJi0pV9ETXTjLNrzRauTs (type « Instagram »).
-- mau : https://openwhyd.org/mauktenieb et /playlist/1 à /10 ; https://docs.google.com/document/d/1t64ZGJEhTHis_Dwh3UIIMFIJU5kkDx2Wi_a8fSENHhU/export?format=txt (suis la redirection ; mets à jour « Top 40 » et « Chemins de traverse »).
-- wya : listes albumoftheyear.org des icebergs et tops de Wyattxhim, https://www.last.fm/music/Wyattxhim/+tracks ; types « Iceberg », « Top », « Sujet de vidéo ».
-- alp : recherche « site:youtube.com Alpha-27 Essentials » et « [Alpha-27 Review] », vérification par https://www.youtube.com/oembed?url=<vidéo>&format=json (auteur Alpha-27) ; type « Essentials », src = la vidéo d'Alpha-27, yt = musique de l'artiste.
-- pag : https://www.dominiquepagani.fr/videos/?vue=toutes et /noms/<slug>/ ; types « Cité dans les ateliers », « Œuvre citée », « Commenté » (title = artiste, meta = vidéo où il est commenté, src = la vidéo).
-- nab : wikinabia.com et légendes indexées de ses vidéos TikTok ; un livre ou un texte de Nabe → fiche « Sujet d'un livre ou texte » au nom de l'artiste qu'il traite.
-- mic : tiktok.com/@microchip.ufo, par ce que les moteurs de recherche en indexent ; type « Archivé ».
+- wya: Wyattxhim's iceberg and top lists on albumoftheyear.org, https://www.last.fm/music/Wyattxhim/+tracks ; types « Iceberg », « Top », « Video subject ».
+- alp: search « site:youtube.com Alpha-27 Essentials » and « [Alpha-27 Review] », checked through https://www.youtube.com/oembed?url=<video>&format=json (author Alpha-27); type « Essentials », src = Alpha-27's video, yt = the artist's music.
+- pag: https://www.dominiquepagani.fr/videos/?vue=toutes and /noms/<slug>/ ; types « Cited in the workshops », « Work cited », « Commented on » (title = artist, meta = the video where Dominique Pagani comments on them, src = the video).
+- nab: wikinabia.com and the indexed captions of his TikTok videos; a book or text by Marc-Édouard Nabe → a « Subject of a book or text » entry under the artist it deals with.
+- mic: tiktok.com/@microchip.ufo, through what search engines index; type « Archived ».
+- mau: https://docs.google.com/document/d/1t64ZGJEhTHis_Dwh3UIIMFIJU5kkDx2Wi_a8fSENHhU/export?format=txt (follow the redirect; update « Top 40 » and « Side paths »).
 
-## 3. Liens
+## 3. Links
 
-- `bc` : page Bandcamp si connue (`bcdirect` true), sinon https://bandcamp.com/search?q=<artiste titre> (vide pour le classique). Artiste présent dans `rym.json` : `genres` = ses 2 premiers genres primaires, `rym` = {rank,url} si l'album y figure, liens Bandcamp et Spotify de son album le mieux classé. `added` = date du jour.
-- Vidéo YouTube obligatoire pour chaque nouvelle fiche : `yt` = https://www.youtube.com/watch?v=ID, `direct` true. Ordre : identifiant donné par la source (s'il n'est pas d'un curateur) ; sinon id YouTube de `rym.json` pour cet album, ou de l'album le mieux classé de l'artiste (`ytvia` = « <album> (<année>), album de l'artiste le mieux classé sur RYM disposant d'un lien YouTube ») ; sinon recherche « site:youtube.com <artiste> <titre> » puis https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=<ID>&format=json : garde la vidéo si son titre contient l'artiste ou le titre et si son auteur reste extérieur aux curateurs. Rien de vérifiable → `yt` = recherche YouTube, `direct` false.
-- Fiche restée sans genre après tout cela : donne-lui 2 genres réalistes.
+- `bc`: the Bandcamp page when known (`bcdirect` true), else https://bandcamp.com/search?q=<artist title> (empty for classical music). Artist in `rym.json`: `genres` = its first 2 primary genres, `rym` = {rank,url} when the album is there, Bandcamp and Spotify links of its best-ranked album. `added` = today.
+- A YouTube video for each new entry: `yt` = https://www.youtube.com/watch?v=ID, `direct` true. Order: the id given by the source (when it belongs to someone other than a curator); else the YouTube id of `rym.json` for that album, or of the artist's best-ranked album (`ytvia` = « <album> (<year>), the artist's best-ranked album on RYM with a YouTube link »); else a search « site:youtube.com <artist> <title> », then https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=<ID>&format=json: keep the video when its title contains the artist or the title and its author is someone other than a curator. Zero video to check → `yt` = YouTube search, `direct` false.
+- An entry with zero genre after all this: give it 2 realistic genres.
 
-## 4. Écrire
+## 4. Write
 
-- `data/catalogue.json` : les nouvelles fiches ajoutées au tableau.
-- `data/veille.json` : ajoute {date, ajouts, bilan}, bilan = « code n » par curateur (« pag 0, nab 2, … »).
-- Premier lundi du mois : rafraîchis `data/rym.json` depuis le dépôt sameraslan/recmyrecord (data-pipeline/catalog/source/rym10k_sheet.csv) en gardant sa structure et en retirant tout identifiant de vidéo de curateur.
-- `data/derniere-veille.md`, réécrit à chaque veille, sans nom de curateur ni de source :
-  - ligne 1 : « # Veille du <date du calendrier républicain> » (règle d'Insert Koin, ex. 29 vendémiaire an 235 pour le 2026-10-20) ;
-  - puis « N nouvelles vidéos » ;
-  - puis une ligne par nouvelle vidéo : « - Artiste · Titre — https://youtu.be/ID » ;
-  - puis « Tout lire : https://www.youtube.com/watch_videos?video_ids=ID1,ID2,… » (50 identifiants au plus par lien, un lien par tranche de 50).
-  Aucune nouvelle vidéo → supprime `data/derniere-veille.md`.
+- `data/catalogue.json`: the new entries added to the array.
+- `data/veille.json`: add your count to today's line written by tools/veille.py (« code n » per curator).
+- First Monday of the month: refresh `data/rym.json` from the repo sameraslan/recmyrecord (data-pipeline/catalog/source/rym10k_sheet.csv), same structure, every curator video id taken out.
+- `data/derniere-veille.md` (written by tools/veille.py): add your new videos in the same form, « - Artist · Title: https://youtu.be/ID », and the « Play all » links, 50 ids at most per link.
