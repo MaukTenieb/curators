@@ -1,4 +1,4 @@
-"""Cassettes de la rubrique CURATORS : aucune source, aucun curateur, seulement des vidéos YouTube.
+"""Cassettes of the CURATORS row: YouTube videos only; labels name a genre and a date, never a source or a curator.
 Chaque étiquette porte un genre et une date du calendrier républicain, au feutre, d'une encre propre au genre.
 Le meuble garde le Top 60, les compilations par genre et les 10 dernières cassettes datées (une par genre et par veille).
 usage : python3 -I tools/cassettes.py data AAAA-MM-JJ"""
@@ -131,5 +131,5 @@ if t: tapes.append(t)
 
 v={'generated':TODAY,'generated_rep':rep(TODAY)[0],'tapes':tapes}
 json.dump(v,open(D+'/vhs-cassettes.json','w'),ensure_ascii=False)
-open(D+'/kg-vhs-curations.js','w').write("/* CURATORS — cassettes pour le magnétoscope d'Insert Koin. Généré le "+rep(TODAY)[0]+" ("+TODAY+"). */\nwindow.KG_VHS_LIBRARY_SNAPSHOT = "+json.dumps(v,ensure_ascii=False)+";\n")
+open(D+'/kg-vhs-curations.js','w').write("/* CURATORS: cassettes for the VHS deck of Insert Koin, by Mauk Tenieb & Korhogo. Pressed on "+rep(TODAY)[1]+" ("+TODAY+"). */\nwindow.KG_VHS_LIBRARY_SNAPSHOT = "+json.dumps(v,ensure_ascii=False)+";\n")
 print(len(tapes),[(t['label'],t['rep'],t['count']) for t in tapes][:6])
