@@ -1,8 +1,10 @@
 """Monday watch, with zero secret and zero AI: reads the curators' sources a program can read,
 adds one entry per new mention, finds a YouTube video for each, logs the watch.
-Sources: Adam Sigmund (The Lowdown on Mad Wasp Radio, archive.org), Ida B. (KALX on Spinitron,
-her Instagram picks on Spotify), Mauk Tenieb (Openwhyd). The other curators wait for the optional
-Claude Code step of the workflow (secret CLAUDE_CODE_OAUTH_TOKEN), or for a hand edit.
+Sources: Adam Sigmund (The Lowdown on Mad Wasp Radio, archive.org), Ida B. (KALX on Spinitron, her Instagram
+picks on Spotify), Mauk Tenieb (Openwhyd), Alpha-27 and Wyattxhim (their YouTube channels, video descriptions),
+Marc-Édouard Nabe (WikiNabia, MediaWiki API), Dominique Pagani (his index of names, domain « musique »),
+Microchip.ufo (The Micro Archives on TikTok, through the DuckDuckGo index). Then a real YouTube video
+replaces the search link of up to VEILLE_RESOLVE entries (default 400), best-ranked first.
 usage: python3 -I tools/veille.py data YYYY-MM-DD
 Code: MIT, Mauk Tenieb & Korhogo."""
 import json, re, sys, html, os, unicodedata, urllib.request, urllib.parse
@@ -149,11 +151,229 @@ def openwhyd():
             f"https://openwhyd.org/mauktenieb/playlist/{pl.get('id')}" if pl else 'https://openwhyd.org/mauktenieb', yt=e[4:15])
 
 
-for f in (lowdown, spinitron, spotify, openwhyd):
+
+# --- the five other curators, read by program ---
+BROWSER = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+           'Accept-Language': 'en-US,en;q=0.8', 'Cookie': 'CONSENT=YES+1; SOCS=CAI'}
+
+
+def getb(url, data=None, tries=3):
+    for _ in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=BROWSER, data=data)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode('utf-8', 'replace')
+        except Exception:
+            continue
+    return None
+
+
+def oembed(vid):
+    s = get('https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=' + vid, tries=2)
+    try: return json.loads(s) if s else None
+    except Exception: return None
+
+
+def channel_videos(cid):
+    """the latest videos of a YouTube channel (about 30), newest first"""
+    s = getb(f'https://www.youtube.com/channel/{cid}/videos') or ''
+    return list(dict.fromkeys(re.findall(r'"videoId":"([\w-]{11})"', s)))
+
+
+def watch(vid):
+    """title and description of a YouTube video"""
+    s = getb('https://www.youtube.com/watch?v=' + vid) or ''
+    m = re.search(r'ytInitialPlayerResponse\s*=\s*(\{.*?\});(?:var |</script>)', s, re.S)
+    try:
+        vd = json.loads(m.group(1))['videoDetails']
+        return vd.get('title', ''), vd.get('shortDescription', '')
+    except Exception:
+        return '', ''
+
+
+CURATOR_CHANNELS = {'UCHTbTDtqLarvm62J83beZQA', 'UC0ZGpaIfJX8xJ_gHI9Zqaww'}
+
+
+def new_self(vid):
+    """a curator's own video: provenance only, kept out of the listening links"""
+    if vid not in SELF:
+        SELF.add(vid)
+        NEW_SELF.append(vid)
+
+
+NEW_SELF = []
+NAMES = {}
+for rk, a in R['albums'].items():
+    if len(a[0]) >= 4: NAMES.setdefault(a[0], 1)
+for x in c:
+    if len(x.get('artist', '')) >= 4: NAMES.setdefault(x['artist'], 1)
+GENRES = {norm(g) for a in R['albums'].values() for g in a[4].split(',')}
+for n in [n for n in NAMES if norm(n) in GENRES or len(n) < 5]: NAMES.pop(n)
+for k in ('Alpha-27', 'Wyattxhim', 'Mauk Tenieb', 'Dominique Pagani', 'Marc-Édouard Nabe', 'Microchip.ufo', 'Ida B.', 'Adam Sigmund'):
+    NAMES.pop(k, None)
+
+
+def names_in(text):
+    """artists of the catalogue or of the RYM top 10,000 named in a text"""
+    found = []
+    for n in NAMES:
+        if n in text and re.search(r'(?<![\w])' + re.escape(n) + r'(?![\w])', text):
+            found.append(n)
+    found.sort(key=len, reverse=True)
+    out = []
+    for n in found:
+        if not any(n in o for o in out): out.append(n)
+    return out
+
+
+# Alpha-27: the « Alpha-27 Essentials » and review episodes of his channel
+def alpha27():
+    for vid in channel_videos('UCHTbTDtqLarvm62J83beZQA'):
+        src = 'https://www.youtube.com/watch?v=' + vid
+        new_self(vid)
+        if src in srcs: continue
+        title, desc = watch(vid)
+        if not re.search(r'essentials|review|top \d+', title, re.I): continue
+        head = re.sub(r'\[.*?\]|\(.*?\)', '', title).strip()
+        names = []
+        m = re.match(r'(.+?)\s+[-–]\s+(.+?)(?:\s+(?:REDUX\s+)?REVIEW)?$', head, re.I)
+        if m and not re.match(r'alpha-27$', m.group(1), re.I):
+            names = [(m.group(1).strip(), m.group(2).strip())]
+        else:
+            names = [(n, '') for n in names_in(title + '\n' + desc.split('My Bandcamp')[0])][:6]
+        for a, t in names:
+            add('alp', 'Essentials', a, t, f'In the Alpha-27 video « {title} »', src)
+
+
+# Wyattxhim: each video description lists the music it plays, with a YouTube link per piece
+def wyattxhim():
+    for vid in channel_videos('UC0ZGpaIfJX8xJ_gHI9Zqaww'):
+        src = 'https://www.youtube.com/watch?v=' + vid
+        new_self(vid)
+        if src in srcs: continue
+        title, desc = watch(vid)
+        label = ''
+        for line in desc.split('\n'):
+            line = line.strip()
+            if not line: continue
+            m = re.search(r'(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]{11})', line)
+            if not m:
+                label = line
+                continue
+            lab, label = label, ''
+            if re.match(r'background music|patreon|merch|other ', lab, re.I): continue
+            yid = m.group(1)
+            if yid in SELF: continue
+            o = oembed(yid)
+            if not o: continue
+            otitle = o.get('title', '')
+            clean = re.sub(r'\s*[\(\[][^\)\]]*(full|album|official|remaster|hq|hd|\d{4})[^\)\]]*[\)\]]', '', otitle, flags=re.I)
+            clean = re.sub(r'\s+full\s+album.*$', '', clean, flags=re.I).strip()
+            a, t = split_at(clean)
+            mq = re.match(r'^(.+?)\s*"(.+?)"', clean)
+            if not t and mq:
+                a, t = re.sub(r'\(.*?\)', '', mq.group(1)).strip(), mq.group(2)
+            t = re.sub(r'\s+(HD|HQ)$', '', t)
+            if not t:
+                a = lab.rstrip(' :') if lab and not re.match(r'^\d+\.?$', lab) else o.get('author_name', '').replace(' - Topic', '')
+                t = clean
+            add('wya', 'Video subject', a, t, f'Played in the Wyattxhim video « {title} »', src, yt=yid)
+
+
+# Marc-Édouard Nabe: the musicians of WikiNabia (MediaWiki API)
+def nabe():
+    for cat in ('Jazzmen', 'Batteurs', 'Inspirations'):
+        cont = ''
+        while True:
+            s = get('https://wikinabia.com/api.php?action=query&list=categorymembers&cmlimit=500&format=json&cmtitle='
+                    + q('Catégorie:' + cat) + cont)
+            if not s: break
+            d = json.loads(s)
+            for p in d['query']['categorymembers']:
+                if p['ns'] != 0: continue
+                t = p['title']
+                src = 'https://wikinabia.com/' + t.replace(' ', '_')
+                if src in srcs: continue
+                if cat == 'Inspirations' and t not in NAMES: continue   # Inspirations mixes writers and painters: musicians only
+                add('nab', 'Pantheon', re.sub(r'\s*\(.*?\)\s*$', '', t), '', f'WikiNabia entry « {cat} »', src)
+            if 'continue' not in d: break
+            cont = '&cmcontinue=' + q(d['continue']['cmcontinue'])
+
+
+# Dominique Pagani: the musicians of his index of names (domain « musique »)
+def pagani():
+    s = getb('https://www.dominiquepagani.fr/noms/') or ''
+    for path, name, n in re.findall(r'data-dom="musique" href="(/noms/[^"]+/)" title="([^"]+)">[^<]*<small>(\d+)</small>', s):
+        src = 'https://www.dominiquepagani.fr' + path
+        if src in srcs: continue
+        name = html.unescape(name)
+        n = int(n)
+        add('pag', 'Cited in the workshops', re.sub(r'\s*\(.*?\)\s*$', '', name), '',
+            f"Cited {n} time{'s' if n > 1 else ''} in Dominique Pagani's workshops", src)
+
+
+# Microchip.ufo: The Micro Archives on TikTok, read through the search engine's index
+def microchip():
+    seen_v = set()
+    for off in range(0, 300, 30):
+        body = urllib.parse.urlencode({'q': 'site:tiktok.com/@microchip.ufo', 's': str(off)}).encode()
+        s = getb('https://html.duckduckgo.com/html/', data=body) or ''
+        hits = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>.*?class="result__snippet"[^>]*>(.*?)</a>', s, re.S)
+        if not hits:   # the lite page of the same index
+            s = getb('https://lite.duckduckgo.com/lite/', data=body) or ''
+            hits = re.findall(r'class=.result-link.[^>]*href="([^"]+)"[^>]*>(.*?)</a>.*?class=.result-snippet.[^>]*>(.*?)</td>', s, re.S)
+        if not hits: break
+        for href, ht, sn in hits:
+            href = urllib.parse.unquote(href)
+            m = re.search(r'tiktok\.com/@microchip\.ufo/video/(\d+)', href)
+            if not m or m.group(1) in seen_v: continue
+            seen_v.add(m.group(1))
+            src = 'https://www.tiktok.com/@microchip.ufo/video/' + m.group(1)
+            if src in srcs: continue
+            text = html.unescape(re.sub(r'<[^>]+>', '', sn))
+            mm = re.search(r'"+([^"]+?)" by (.+?) from the (?:album|EP|single) (.+?)\.(?:\s|$|")', text)
+            if not mm: continue
+            tags = [t for t in re.findall(r'#(\w+)', text) if t.lower() not in ('california',) and t.lower() != norm(mm.group(2)).replace(' ', '')]
+            g = {} if BEST.get(norm(mm.group(2))) else {'genres': tags[:3]}
+            add('mic', 'Archived', mm.group(2), mm.group(1), f'The Micro Archives, from the album « {mm.group(3)} »', src, extra=g)
+
+
+# a real YouTube video for each entry that still has only a search link
+def resolve(limit):
+    todo = [x for x in c + new if not x.get('direct') and x.get('artist')]
+    todo.sort(key=lambda x: (-len(x.get('cross') or []), x.get('rr') or 1e9))
+    done = 0
+    for x in todo[:limit]:
+        a = x['artist']
+        t = x['title'].split(' · ', 1)[1] if ' · ' in x['title'] else ''
+        t = re.sub(r'^s\d{5}\s*', '', t)
+        s = getb('https://www.youtube.com/results?search_query=' + q((a + ' ' + t).strip()))
+        if not s: continue
+        for vid in list(dict.fromkeys(re.findall(r'"videoId":"([\w-]{11})"', s)))[:5]:
+            if vid in SELF: continue
+            o = oembed(vid)
+            if not o: continue
+            ot, au = norm(o.get('title', '')), norm(o.get('author_name', ''))
+            if norm(a) and (norm(a) in ot or norm(a) in au) and (not t or norm(t)[:12] in ot or norm(a) in au):
+                x['yt'] = 'https://www.youtube.com/watch?v=' + vid
+                x['direct'] = True
+                x.pop('ytvia', None)
+                done += 1
+                break
+    return done
+
+
+for f in (lowdown, spinitron, spotify, openwhyd, alpha27, wyattxhim, nabe, pagani, microchip):
     try: f()
     except Exception as e: print('source failed:', f.__name__, e)
 
+try: found = resolve(int(os.environ.get('VEILLE_RESOLVE', '400')))
+except Exception as e: found = 0; print('resolve failed:', e)
+print(found, 'search links replaced by a checked video')
 c.extend(new)
+if NEW_SELF:
+    P = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'self_ids.json')
+    json.dump(sorted(SELF), open(P, 'w', encoding='utf-8'), ensure_ascii=False)
 json.dump(c, open(CAT, 'w', encoding='utf-8'), ensure_ascii=False)
 V = os.path.join(D, 'veille.json')
 v = json.load(open(V, encoding='utf-8'))

@@ -6,14 +6,14 @@ Curators lists the music that eight curators put forward by other artists. Every
 
 | Code | Curator | Sources | Read by |
 |---|---|---|---|
-| `pag` | Dominique Pagani | workshops, *Pagani Parle Musique*, *Musicosophie* (dominiquepagani.fr, pages of the names cited) | Claude Code |
-| `nab` | Marc-Édouard Nabe | wikinabia.com, indexed captions of his TikTok videos | Claude Code |
-| `wya` | Wyattxhim | YouTube channel; icebergs and tops on albumoftheyear.org; last.fm | Claude Code |
+| `pag` | Dominique Pagani | the index of names of dominiquepagani.fr, domain « musique »; workshops, *Pagani Parle Musique*, *Musicosophie* | program |
+| `nab` | Marc-Édouard Nabe | wikinabia.com (MediaWiki API: Jazzmen, Batteurs, Inspirations) | program |
+| `wya` | Wyattxhim | YouTube channel: each video description links the music it plays; icebergs and tops on albumoftheyear.org | program |
 | `ida` | Ida B. (Sly Ida) | KALX shows on Spinitron, WRIR, the Spotify playlist of her Instagram picks | program |
-| `mau` | Mauk Tenieb | Openwhyd (program); Top 40 and Side paths, a public document (Claude Code) | program, Claude Code |
-| `alp` | Alpha-27 | *Alpha-27 Essentials* and *Alpha-27 Review* videos | Claude Code |
+| `mau` | Mauk Tenieb | Openwhyd; Top 40 and Side paths, a public document | program |
+| `alp` | Alpha-27 | YouTube channel: *Alpha-27 Essentials* and review episodes | program |
 | `sig` | Adam Sigmund | *The Lowdown on Mad Wasp Radio* (archive.org), the sub65 netlabel | program |
-| `mic` | Microchip.ufo | *The Micro Archives* (tiktok.com/@microchip.ufo) | Claude Code |
+| `mic` | Microchip.ufo | *The Micro Archives* (tiktok.com/@microchip.ufo), through the DuckDuckGo index | program |
 
 Rate Your Music's top 10,000 albums (repo sameraslan/recmyrecord) gives ranks and genres.
 
@@ -53,10 +53,11 @@ The watch leaves out three things:
 
 The workflow `.github/workflows/veille.yml` starts every Monday at 6:49 UTC.
 
-1. `tools/veille.py` reads, with zero secret: the new episodes of The Lowdown on archive.org, the new KALX shows of Ida B. on Spinitron, her Spotify playlist, Mauk Tenieb's Openwhyd. It adds one entry per new mention, takes the YouTube id the source gives or the video of the artist's best-ranked album in `rym.json`, else a YouTube search link.
-2. When the repo has the secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code follows [veille/PROMPT.md](veille/PROMPT.md) for the other curators.
-3. `tools/recalcule.py`, then `tools/cassettes.py`.
-4. The workflow commits « Watch of … » and publishes a release with the new videos and their YouTube playlists.
+1. `tools/veille.py` reads the eight curators with zero secret: The Lowdown on archive.org; Ida B.'s KALX shows on Spinitron and her Spotify playlist; Mauk Tenieb's Openwhyd; the YouTube channels of Alpha-27 and Wyattxhim (titles, descriptions and the videos they link); WikiNabia through its API; Dominique Pagani's index of names; The Micro Archives through the DuckDuckGo index. It adds one entry per new mention and takes the YouTube id the source gives, or the video of the artist's best-ranked album in `rym.json`.
+2. It then searches YouTube for up to 400 entries that still have a search link, best-ranked first, and keeps a video when its title or channel names the artist (oEmbed check). Every week the catalogue gains real videos.
+3. With the secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code also follows [veille/PROMPT.md](veille/PROMPT.md).
+4. `tools/recalcule.py`, then `tools/cassettes.py`.
+5. The workflow commits « Watch of … » and publishes a release with the new videos and their YouTube playlists.
 
 At 9:19 UTC, the workflow `curators` of Insert Koin copies `data/kg-vhs-curations.js` into its VHS deck. The workflow `controle` checks the programs on every change. The page https://mauktenieb.github.io/curators/ shows the catalogue, the rankings and the cassettes.
 

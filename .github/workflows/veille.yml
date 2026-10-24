@@ -1,5 +1,5 @@
-# Monday watch. A program (tools/veille.py) reads the curators' sources a program can read, with zero secret:
-# The Lowdown on archive.org, KALX on Spinitron, the Spotify playlist of Ida B., Openwhyd.
+# Monday watch. A program (tools/veille.py) reads the eight curators, with zero secret (sources: METHOD.md),
+# and gives a checked YouTube video to up to 400 entries that still have a search link. It also runs when tools/veille.py changes.
 # When the repo has the secret CLAUDE_CODE_OAUTH_TOKEN, Claude Code also reads the other sources (veille/PROMPT.md).
 # Then the programs recompute the ranking and press the cassettes; each watch commits « Watch of … »
 # and publishes a release with the new videos.
@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "49 6 * * 1"   # Monday, 6:49 UTC
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/veille.py']
 
 permissions:
   contents: write

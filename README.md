@@ -27,7 +27,7 @@ Ranks and genres come from Rate Your Music's top 10,000 albums ([sameraslan/recm
 
 ## Monday watch
 
-1. The workflow `veille` starts on Monday at 6:49 UTC. `tools/veille.py` reads, with zero secret, Adam Sigmund's The Lowdown, Ida B.'s KALX shows and Spotify playlist, and Mauk Tenieb's Openwhyd; it adds one entry per new mention and finds a YouTube video for each. With the secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code also reads the other curators, following [veille/PROMPT.md](veille/PROMPT.md).
+1. The workflow `veille` starts on Monday at 6:49 UTC. `tools/veille.py` reads the eight curators with zero secret (archive.org, Spinitron, Spotify, Openwhyd, two YouTube channels, the WikiNabia API, Dominique Pagani's index of names, the DuckDuckGo index of TikTok), adds one entry per new mention, then gives a checked YouTube video to up to 400 entries that still have a search link. Details: [METHOD.md](METHOD.md).
 2. `tools/recalcule.py` recomputes the catalogue; `tools/cassettes.py` presses the cassettes.
 3. The workflow commits « Watch of … » and publishes a release with the new videos and links that play them as YouTube playlists.
 4. At 9:19 UTC, the workflow `curators` of Insert Koin copies `data/kg-vhs-curations.js` into its VHS deck.
@@ -67,7 +67,7 @@ python3 -I tools/cassettes.py data YYYY-MM-DD
 
 ## Setup
 
-GitHub Pages serves `index.html` from the branch `main`. The program watch runs with zero secret. The optional secret `CLAUDE_CODE_OAUTH_TOKEN` adds the curators that only a reader of web pages can follow.
+GitHub Pages serves `index.html` from the branch `main`. The watch runs with zero secret. The optional secret `CLAUDE_CODE_OAUTH_TOKEN` adds a Claude Code pass (veille/PROMPT.md).
 
 ## Rights
 

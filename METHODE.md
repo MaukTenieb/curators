@@ -55,7 +55,7 @@ La musique d'un curateur choisie par un autre curateur reste au catalogue.
 
 Le flux `.github/workflows/veille.yml` part chaque lundi à 6 h 49 UTC.
 
-1. `tools/veille.py` lit, sans aucun secret : les nouveaux épisodes de The Lowdown sur archive.org, les nouvelles émissions KALX d'Ida B. sur Spinitron, sa playlist Spotify, l'Openwhyd de Mauk Tenieb. Il ajoute une fiche par nouvelle mention et prend l'identifiant YouTube donné par la source, sinon la vidéo de l'album de l'artiste le mieux classé dans `rym.json`, sinon un lien de recherche YouTube.
+1. `tools/veille.py` lit les huit curateurs, sans aucun secret : The Lowdown sur archive.org ; les émissions KALX d'Ida B. sur Spinitron et sa playlist Spotify ; l'Openwhyd de Mauk Tenieb ; les chaînes YouTube d'Alpha-27 et de Wyattxhim (titres, descriptions, vidéos citées) ; WikiNabia par son API ; l'index des noms de Dominique Pagani ; The Micro Archives par l'index de DuckDuckGo. Il cherche ensuite sur YouTube une vraie vidéo pour 400 fiches au plus qui n'ont qu'un lien de recherche. Il ajoute une fiche par nouvelle mention et prend l'identifiant YouTube donné par la source, sinon la vidéo de l'album de l'artiste le mieux classé dans `rym.json`, sinon un lien de recherche YouTube.
 2. Quand le dépôt a le secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code suit `veille/PROMPT.md` pour les autres curateurs (Dominique Pagani, Marc-Édouard Nabe, Wyattxhim, Alpha-27, Microchip.ufo).
 3. `tools/recalcule.py`, puis `tools/cassettes.py`.
 4. Le flux commite « Watch of … » et publie une note de veille (release) avec les nouvelles vidéos et leurs listes de lecture YouTube.
