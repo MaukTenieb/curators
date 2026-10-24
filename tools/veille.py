@@ -186,9 +186,21 @@ def watch(vid):
     m = re.search(r'ytInitialPlayerResponse\s*=\s*(\{.*?\});(?:var |</script>)', s, re.S)
     try:
         vd = json.loads(m.group(1))['videoDetails']
-        return vd.get('title', ''), vd.get('shortDescription', '')
+        if vd.get('shortDescription'): return vd.get('title', ''), vd['shortDescription']
     except Exception:
-        return '', ''
+        pass
+    # the page of a server address may hold a bot check: the player API (web client) still gives title and description
+    body = json.dumps({'context': {'client': {'clientName': 'WEB', 'clientVersion': '2.20250101.00.00', 'hl': 'en'}}, 'videoId': vid}).encode()
+    try:
+        req = urllib.request.Request('https://www.youtube.com/youtubei/v1/player?prettyPrint=false', data=body,
+                                     headers={'Content-Type': 'application/json', 'User-Agent': BROWSER['User-Agent']})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            vd = json.loads(r.read().decode('utf-8', 'replace')).get('videoDetails', {})
+        if vd.get('title'): return vd['title'], vd.get('shortDescription', '')
+    except Exception:
+        pass
+    o = oembed(vid)
+    return (o or {}).get('title', ''), ''
 
 
 CURATOR_CHANNELS = {'UCHTbTDtqLarvm62J83beZQA', 'UC0ZGpaIfJX8xJ_gHI9Zqaww'}
@@ -364,8 +376,10 @@ def resolve(limit):
 
 
 for f in (lowdown, spinitron, spotify, openwhyd, alpha27, wyattxhim, nabe, pagani, microchip):
+    n0 = len(new)
     try: f()
     except Exception as e: print('source failed:', f.__name__, e)
+    print(f.__name__, len(new) - n0, 'new entries')
 
 try: found = resolve(int(os.environ.get('VEILLE_RESOLVE', '400')))
 except Exception as e: found = 0; print('resolve failed:', e)
