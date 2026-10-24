@@ -54,7 +54,7 @@ The watch leaves out three things:
 The workflow `.github/workflows/veille.yml` starts every Monday at 6:49 UTC.
 
 1. `tools/veille.py` reads the eight curators with zero secret: The Lowdown on archive.org; Ida B.'s KALX shows on Spinitron and her Spotify playlist; Mauk Tenieb's Openwhyd; the YouTube channels of Alpha-27 and Wyattxhim (titles, descriptions and the videos they link); WikiNabia through its API; Dominique Pagani's index of names; The Micro Archives through the DuckDuckGo index. It adds one entry per new mention and takes the YouTube id the source gives, or the video of the artist's best-ranked album in `rym.json`.
-2. It then searches YouTube for up to 400 entries that still have a search link, best-ranked first, and keeps a video when its title or channel names the artist (oEmbed check). Every week the catalogue gains real videos.
+2. It then searches YouTube for every entry that still have a search link, best-ranked first, and keeps a video when its title or channel names the artist (oEmbed check). Every week the catalogue gains real videos.
 3. With the secret `CLAUDE_CODE_OAUTH_TOKEN`, Claude Code also follows [veille/PROMPT.md](veille/PROMPT.md).
 4. `tools/recalcule.py`, then `tools/cassettes.py`.
 5. The workflow commits « Watch of … » and publishes a release with the new videos and their YouTube playlists.

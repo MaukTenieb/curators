@@ -4,7 +4,7 @@ Sources: Adam Sigmund (The Lowdown on Mad Wasp Radio, archive.org), Ida B. (KALX
 picks on Spotify), Mauk Tenieb (Openwhyd), Alpha-27 and Wyattxhim (their YouTube channels, video descriptions),
 Marc-Édouard Nabe (WikiNabia, MediaWiki API), Dominique Pagani (his index of names, domain « musique »),
 Microchip.ufo (The Micro Archives on TikTok, through the DuckDuckGo index). Then a real YouTube video
-replaces the search link of up to VEILLE_RESOLVE entries (default 400), best-ranked first.
+replaces the search link of up to VEILLE_RESOLVE entries (default 3500), best-ranked first.
 usage: python3 -I tools/veille.py data YYYY-MM-DD
 Code: MIT, Mauk Tenieb & Korhogo."""
 import json, re, sys, html, os, unicodedata, urllib.request, urllib.parse
@@ -410,7 +410,7 @@ for f in (lowdown, spinitron, spotify, openwhyd, alpha27, wyattxhim, nabe, pagan
     except Exception as e: print('source failed:', f.__name__, e)
     print(f.__name__, len(new) - n0, 'new entries')
 
-try: found = resolve(int(os.environ.get('VEILLE_RESOLVE', '400')))
+try: found = resolve(int(os.environ.get('VEILLE_RESOLVE', '3500')))
 except Exception as e: found = 0; print('resolve failed:', e)
 print(found, 'search links replaced by a checked video')
 c.extend(new)

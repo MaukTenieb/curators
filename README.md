@@ -27,7 +27,7 @@ Ranks and genres come from Rate Your Music's top 10,000 albums ([sameraslan/recm
 
 ## Monday watch
 
-1. The workflow `veille` starts on Monday at 6:49 UTC. `tools/veille.py` reads the eight curators with zero secret (archive.org, Spinitron, Spotify, Openwhyd, two YouTube channels, the WikiNabia API, Dominique Pagani's index of names, the DuckDuckGo index of TikTok), adds one entry per new mention, then gives a checked YouTube video to up to 400 entries that still have a search link. Details: [METHOD.md](METHOD.md).
+1. The workflow `veille` starts on Monday at 6:49 UTC. `tools/veille.py` reads the eight curators with zero secret (archive.org, Spinitron, Spotify, Openwhyd, two YouTube channels, the WikiNabia API, Dominique Pagani's index of names, the DuckDuckGo index of TikTok), adds one entry per new mention, then gives a checked YouTube video to every entry that still has a search link. Details: [METHOD.md](METHOD.md).
 2. `tools/recalcule.py` recomputes the catalogue; `tools/cassettes.py` presses the cassettes.
 3. The workflow commits « Watch of … » and publishes a release with the new videos and links that play them as YouTube playlists.
 4. At 9:19 UTC, the workflow `curators` of Insert Koin copies `data/kg-vhs-curations.js` into its VHS deck.
