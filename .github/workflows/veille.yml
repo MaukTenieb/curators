@@ -75,6 +75,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "watch-${{ steps.date.outputs.day }}" \
+          gh release create "watch-${{ steps.date.outputs.day }}-$(date -u +%H%M)" \
             --title "$(head -n1 data/derniere-veille.md | sed 's/^# //')" \
             --notes-file data/derniere-veille.md

@@ -199,6 +199,35 @@ def watch(vid):
         if vd.get('title'): return vd['title'], vd.get('shortDescription', '')
     except Exception:
         pass
+    # the watch-next API: the description, its links as runs over the text
+    try:
+        req = urllib.request.Request('https://www.youtube.com/youtubei/v1/next?prettyPrint=false', data=body,
+                                     headers={'Content-Type': 'application/json', 'User-Agent': BROWSER['User-Agent']})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            d = json.loads(r.read().decode('utf-8', 'replace'))
+        found = []
+
+        def walk(o):
+            if isinstance(o, dict):
+                if 'attributedDescription' in o and isinstance(o['attributedDescription'], dict): found.append(o['attributedDescription'])
+                for v in o.values(): walk(v)
+            elif isinstance(o, list):
+                for v in o: walk(v)
+        walk(d)
+        if found:
+            ad = found[0]
+            u16 = ad.get('content', '').encode('utf-16-le')
+            runs = []
+            for cr in ad.get('commandRuns', []):
+                ep = (cr.get('onTap', {}).get('innertubeCommand', {}) or {}).get('watchEndpoint', {})
+                if ep.get('videoId'): runs.append((cr['startIndex'], cr['length'], ep['videoId']))
+            for st, ln, v in sorted(runs, reverse=True):
+                u16 = u16[:st * 2] + ('https://youtu.be/' + v).encode('utf-16-le') + u16[(st + ln) * 2:]
+            text = u16.decode('utf-16-le')
+            o = oembed(vid)
+            return (o or {}).get('title', ''), text
+    except Exception:
+        pass
     o = oembed(vid)
     return (o or {}).get('title', ''), ''
 
