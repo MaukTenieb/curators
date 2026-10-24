@@ -1,8 +1,93 @@
 # Watch of 2026-10-24
 
-2 new videos
+86 new videos
 
-- The Gerogerigegege · Uguisudani Apocalypse: https://youtu.be/gcECKB9dCfg
-- Ramones: https://youtu.be/j3KzGpptn5Q
+- Consumer Softproducts: https://youtu.be/GA8R1-o0nIg
+- Mutiilation · Vampires Of Black Imperial Blood: https://youtu.be/cIy4Ve8YEh8
+- Vlad Tepes · Celtic Poetry: https://youtu.be/-qF3XgGNUVY
+- Aäkon Këëtrëh · Dans la forêt...: https://youtu.be/ELnsd9blhhU
+- Blasphemy · Blood Upon the Altar: https://youtu.be/M4xCU6QTwUs
+- Blasphemy · Fallen Angel of Doom: https://youtu.be/EAZnHJ9-0EA
+- Blasphemy · Gods of War: https://youtu.be/ptL1NeJ6I2o
+- Mona Fandey · Ratapan Anak: https://youtu.be/vUDv8E1krqc
+- FOREST · Forest: https://youtu.be/i7yXcFYxgqk
+- Branikald · Hladavzor (Хладавзор): https://youtu.be/-qcnswOGWTU
+- Rundagor · Stronghold of Ruin: https://youtu.be/GJmMCWRlLcY
+- Raven Dark · Berustet Av Kriegsdronnet: https://youtu.be/DOth6p_1wUE
+- Stabat Mater · Give Them Pain Funeral Doom Metal: https://youtu.be/XvXlohkdoiY
+- WOODS OF BELIAL · Deimos XIII: https://youtu.be/UlqlLIX48vc
+- Nivathe · Enveloped in a Diseased Abyss: https://youtu.be/ckHYU2rHh8E
+- SDL010 Planet AIDS (Nl) · Apokalyptic AIDS - CD: https://youtu.be/1_3xMkw8eZk
+- DICTATOR · The Pain Sessions: https://youtu.be/Gbeu0fBy9qg
+- Thorns of the Carrion · The Gardens of Dead Winter: https://youtu.be/21jLpxROgFk
+- FistfulofFlags · Thorns of the Carrion -- The Scarlet Tapestry: https://youtu.be/xXIJLvPutXI
+- Dahmer · Dahmerized: https://youtu.be/2BBfwb-PgiU
+- Regurgitate · Effortless Regurgitation Of Bright Red Blood: https://youtu.be/prFDUGdx5uA
+- Death Toll 80k · Nothing In Common: https://youtu.be/4PcH_ZrlHpI
+- Napalm Death · From Enslavement To Obliteration: https://youtu.be/8ccef0zAMbE
+- O.L.D. · Old Lady Drivers LP: https://youtu.be/4x-JCEUyz_M
+- Punk & Metal & Vidya · Repulsion-Horrifed: https://youtu.be/KiHl-Px8fig
+- Takafumi Matsubara · Strange, Beautiful And Fast LP: https://youtu.be/mOoHjuW804U
+- Discordance Axis · Jouhou: https://youtu.be/NhgG0j6L09w
+- Psudoku · Planetarisk Sudoku: https://youtu.be/Dziqr6JUFg8
+- Flagitious Idiosyncrasy In The Dilapidation · Self Titled [Grindcore]: https://youtu.be/7VUN3sdOb68
+- !T.O.O.H.! · Order and Punishment: https://youtu.be/VLiR5QKQ44U
+- ItsMickCarter · Painkiller-Guts of a Virgin: https://youtu.be/MspKMv9W5ds
+- Nuclear Death · Bride of Insect: https://youtu.be/BUl-9rDa11Q
+- Naked Whipper · Painstreaks: https://youtu.be/BYrhygTo23k
+- Contrastic · Constrastic: https://youtu.be/ZubDIaS6Ats
+- Swarrrm · Nise Kyûseishu Domo (Thee Imitation Messiahs): https://youtu.be/S3EI8pJzuPs
+- Zombie TV · Catasexual Urge Motivation-The Encyclopedia Of Serial Murders ( 連続殺人大百科 ): https://youtu.be/CTJvk6yRzw4
+- Öxxö Xööx · Ägörth: https://youtu.be/0DTaIFTuVPA
+- MY DYING BRIDE · The angel and the dark river: https://youtu.be/W2HRbTsayXo
+- TREES OF ETERNITY · Hour of the Nightingale: https://youtu.be/eLXh3s12bO4
+- Solitude Aeturnus · Into The Depths Of Sorrow: https://youtu.be/d72j6GEgaJc
+- Todesbonden · Sleep Now, Quiet Forest: https://youtu.be/N10MwtCFLFc
+- Grief · Earthworm: https://youtu.be/eeKIZLSbv9k
+- Mizmor · Yodh -: https://youtu.be/Obd52q2vQ8M
+- Electric Wizard · Dopethrone: https://youtu.be/eaMbKZPBruU
+- Candlemass · ANCIENT DREAMS -: https://youtu.be/xQyxIAOgdPc
+- Bell Witch · Longing: https://youtu.be/UXit3Jy4a_E
+- Black Sabbath · Sabbath Bloody Sabbath: https://youtu.be/nA9JHzhqznA
+- GNAW · This Face: https://youtu.be/jhMwpRWXhao
+- Woods of Ypres · Woods 5: Grey Skies & Electric Light: https://youtu.be/GazX1PR0j_k
+- The Angelic Process · Weighing Souls with Sand: https://youtu.be/G9ZiU7ahZso
+- KAUAN · Pirut: https://youtu.be/0dTYOylOCzM
+- Expect No Mercy · Steelbreed: https://youtu.be/YMq-f_Ymrxc
+- Expect No Mercy · Watch Your Ears and Save Your Neck We Are Back to Our Second Attack!: https://youtu.be/Z0lF07MOaRk
+- Killer Fox(x) · Going Under -: https://youtu.be/rbodyZ6Lgrs
+- Killer Fox · Orgasm Of Death: https://youtu.be/bie71GEY6I4
+- THRASH QUEEN · Manslayer: https://youtu.be/Ypa9TqK_zvs
+- Thrash Queen · Ashes to Ashes (Part 1): https://youtu.be/gqaoV_Pd5tE
+- Kalaschnikov · Desert Storm: https://youtu.be/Cfk34SvT4Fw
+- Charlie Looker interview · Hydrating the Desiccated Legions in Phonographic Evaluation w/ Wyattxhim: https://youtu.be/edPSh4rnom0
+- Shred Beard // Warhammer666 interview · MAYHEM SUNDAYS! EP.31 WITH @wyattxhim: https://youtu.be/XK1ujVSuBGg
+- Necramyth · Slaughter of the Seoul: https://youtu.be/CMIXmeRPBvw
+- Interview with Esther Gold · Metal Health interview David Gold's Mom Woods of Ypres: https://youtu.be/IF-W5_X2w-A
+- WOODS OF YPRES · The Lost CBC TV Report: https://youtu.be/oJ5oa2itIwc
+- Listen Here (Playlist Of Albums) · Atrax Morgue | In Search of Death | 1993 | FLAC: https://youtu.be/h003Cj0E2LY
+- ThisMachineKillsMusic Video · Esthetik Of A Corpse | Where To Start With Atrax Morgue: https://youtu.be/hXTqWGmrVv8
+- Sources · Connor Betts Friend PKG Revised: https://youtu.be/Z2ueDF8UxfU
+- Windir · Sogneriket - 1994: https://youtu.be/e3OW-CGDog0
+- Windir · Det Gamle Riket (Demo): https://youtu.be/VT_fMD1UEWY
+- Windir · Sognametal DVD rip Full Concert: https://youtu.be/joOqhfsr5dQ
+- Sacrificial Totem · From the Fallen: https://youtu.be/x7N5RL-F56E
+- SACRIFICIAL TOTEM · "Kurghan" (Olympia, Wa / USA / Dark Ambient / Metal): https://youtu.be/pir5T084JOI
+- If a Tree Falls Documentary · If a Tree Falls: A Story of the Earth Liberation Front: https://youtu.be/qwQoi0DoOKM
+- Pyrexia Live · PYREXIA live at Saint Vitus Bar, Dec. 30th, 2013: https://youtu.be/oUMdi5_47bo
+- Vice Documentary · True Norwegian Black Metal | VICE: https://youtu.be/32iX5lbVDto
+- GORGOROTH (NOR) · Black Mass Krakow 2004 4K: https://youtu.be/UXQYZNmfiEg
+- Endless Dismal Moan · 01 - Spell (Intro) [Endless Dismal Moan]: https://youtu.be/zOUrMfeV4tg
+- Endless Dismal Moan · Lord of Nightmare: https://youtu.be/07gl0E7FfQ8
+- Endless Dismal Moan · Ruin: https://youtu.be/lm1Fv1vctXw
+- Endless Dismal Moan · Curse of Underground: https://youtu.be/Z9qZ_6yfw5c
+- Discharge By Death (USA) · Self Titled: https://youtu.be/oeKlc34nab0
+- CELL BLOCK AUTOPSY · Ambient Passages of Despair: https://youtu.be/G916mo5gx6s
+- The New Detectives Documentary · Blind Trust | FULL EPISODE | The New Detectives: https://youtu.be/P5TpwNqY9UM
+- Niezgal · Kali pahaśnie Sonca: https://youtu.be/dA33ZgWyOQ4
+- Ill Omen · Radiant Behest of Excessum: https://youtu.be/8lY2D_pQ7LE
+- Infernal Wisdom · Infernal Wisdom: https://youtu.be/6GwzRzNKdyY
+- Crime Documentaires (Russian/Belarusian) · "Тайны следствия": одержимый местью: https://youtu.be/LsAMPtQ8K0E
 
-Play all: https://www.youtube.com/watch_videos?video_ids=gcECKB9dCfg,j3KzGpptn5Q
+Play all: https://www.youtube.com/watch_videos?video_ids=GA8R1-o0nIg,cIy4Ve8YEh8,-qF3XgGNUVY,ELnsd9blhhU,M4xCU6QTwUs,EAZnHJ9-0EA,ptL1NeJ6I2o,vUDv8E1krqc,i7yXcFYxgqk,-qcnswOGWTU,GJmMCWRlLcY,DOth6p_1wUE,XvXlohkdoiY,UlqlLIX48vc,ckHYU2rHh8E,1_3xMkw8eZk,Gbeu0fBy9qg,21jLpxROgFk,xXIJLvPutXI,2BBfwb-PgiU,prFDUGdx5uA,4PcH_ZrlHpI,8ccef0zAMbE,4x-JCEUyz_M,KiHl-Px8fig,mOoHjuW804U,NhgG0j6L09w,Dziqr6JUFg8,7VUN3sdOb68,VLiR5QKQ44U,MspKMv9W5ds,BUl-9rDa11Q,BYrhygTo23k,ZubDIaS6Ats,S3EI8pJzuPs,CTJvk6yRzw4,0DTaIFTuVPA,W2HRbTsayXo,eLXh3s12bO4,d72j6GEgaJc,N10MwtCFLFc,eeKIZLSbv9k,Obd52q2vQ8M,eaMbKZPBruU,xQyxIAOgdPc,UXit3Jy4a_E,nA9JHzhqznA,jhMwpRWXhao,GazX1PR0j_k,G9ZiU7ahZso
+Play all: https://www.youtube.com/watch_videos?video_ids=0dTYOylOCzM,YMq-f_Ymrxc,Z0lF07MOaRk,rbodyZ6Lgrs,bie71GEY6I4,Ypa9TqK_zvs,gqaoV_Pd5tE,Cfk34SvT4Fw,edPSh4rnom0,XK1ujVSuBGg,CMIXmeRPBvw,IF-W5_X2w-A,oJ5oa2itIwc,h003Cj0E2LY,hXTqWGmrVv8,Z2ueDF8UxfU,e3OW-CGDog0,VT_fMD1UEWY,joOqhfsr5dQ,x7N5RL-F56E,pir5T084JOI,qwQoi0DoOKM,oUMdi5_47bo,32iX5lbVDto,UXQYZNmfiEg,zOUrMfeV4tg,07gl0E7FfQ8,lm1Fv1vctXw,Z9qZ_6yfw5c,oeKlc34nab0,G916mo5gx6s,P5TpwNqY9UM,dA33ZgWyOQ4,8lY2D_pQ7LE,6GwzRzNKdyY,LsAMPtQ8K0E
